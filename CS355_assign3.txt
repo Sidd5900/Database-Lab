@@ -1,0 +1,386 @@
+//Name: Siddharth Sanskritayan
+//Roll: 1901CS75
+//Assignment: 3
+
+
+#Question 1a) 
+
+//Adding Column CType in Course
+
+mysql> alter table Course
+    -> add column CType varchar(20);
+
+//Adding Column Email in Student
+
+mysql> alter table Student
+    -> add column Email varchar(30);
+
+//Making the Email unique 
+
+mysql> alter table Student
+    -> add constraint uniqueemail unique(Email);
+
+
+//------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 1b)
+
+//Updating CType of Course
+
+mysql> alter table course alter CType set default "Core";
+mysql> update course set CType="Core" where CCode in ("CS204","CS305","CS306","CS307","CS309","CS354","ME102");
+mysql> update course set CType="Open Elective" where CCode in ("CS225","CS244","CS308","ME502");
+mysql> update course set CType="Elective" where CCode in ("CS310","ME501");
+mysql> insert into course values("CS561","Architecture",5,"Elective");
+mysql> insert into course values("CS555","Automata Theory",6,"Elective");
+mysql> insert into course values("CS599","Architecture Lab",3,"Elective");
+
+//Updated table Course
+
+mysql> select * from course;
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       |      8 | Core          |
+| CS225 | DataSc           |      6 | Open Elective |
+| CS244 | Maths            |      7 | Open Elective |
+| CS305 | OOPS             |      4 | Core          |
+| CS306 | DataStr          |      7 | Core          |
+| CS307 | Networks         |      5 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS309 | OS               |      3 | Core          |
+| CS310 | Python           |      5 | Elective      |
+| CS354 | Database Systems |      8 | Core          |
+| CS555 | Automata Theory  |      6 | Elective      |
+| CS561 | Architecture     |      5 | Elective      |
+| CS599 | Architecture Lab |      3 | Elective      |
+| ME102 | Mechanics        |      3 | Core          |
+| ME501 | Thermodynamics   |      4 | Elective      |
+| ME502 | Fluids           |      5 | Open Elective |
++-------+------------------+--------+---------------+
+
+
+
+//Updating Email of Student Table
+
+mysql> update student set Email="aman@gmail.com" where RollNo="1901CS01";
+mysql> update student set Email="amit@gmail.com" where RollNo="1901CS02";
+mysql> update student set Email="harshita@yahoo.com" where RollNo="1901CS03";
+mysql> update student set Email="himanshu@yahoo.com" where RollNo="1901CS04";
+mysql> update student set Email="prakhar@outlook.com" where RollNo="1901CS05";
+mysql> update student set Email="riya@gmail.com" where RollNo="1901CS06";
+mysql> update student set Email="shubh@yahoo.com" where RollNo="1901CS07";
+mysql> update student set Email="sid@gmail.com" where RollNo="1901CS08";
+mysql> update student set Email="vijaya@gmail.com" where RollNo="1901CS09";
+mysql> update student set Email="vineeta@outlook.com" where RollNo="1901CS10";
+mysql> update student set Email="kavya@yahoo.com" where RollNo="1901CS11";
+mysql> update student set Email="ritwik@outlook.com" where RollNo="1901CS99";
+mysql> update student set Email="gaurav@gmail.com" where RollNo="1901EE02";
+mysql> update student set Email="pushkar@yahoo.com" where RollNo="1901ME01";
+mysql> update student set Email="sakshi@yahoo.com" where RollNo="1901ME02";
+
+//Updated Student table:
+
+mysql> select * from student;
++----------+-----------+--------+-----------+---------------------+
+| RollNo   | SName     | Gender | City      | Email               |
++----------+-----------+--------+-----------+---------------------+
+| 1901CS01 | Aman      | M      | Delhi     | aman@gmail.com      |
+| 1901CS02 | Amit      | M      | Delhi     | amit@gmail.com      |
+| 1901CS03 | Harshita  | F      | Patna     | harshita@yahoo.com  |
+| 1901CS04 | Himanshu  | M      | Mumbai    | himanshu@yahoo.com  |
+| 1901CS05 | Prakhar   | M      | Pune      | prakhar@outlook.com |
+| 1901CS06 | Riya      | F      | Kolkata   | riya@gmail.com      |
+| 1901CS07 | Shubham   | M      | Patna     | shubh@yahoo.com     |
+| 1901CS08 | Siddharth | M      | Kolkata   | sid@gmail.com       |
+| 1901CS09 | Vijaya    | F      | Delhi     | vijaya@gmail.com    |
+| 1901CS10 | Vineeta   | F      | Mumbai    | vineeta@outlook.com |
+| 1901CS11 | Kavya     | F      | Delhi     | kavya@yahoo.com     |
+| 1901CS99 | Ritwik    | M      | Bangalore | ritwik@outlook.com  |
+| 1901EE02 | Gaurav    | M      | Patna     | gaurav@gmail.com    |
+| 1901ME01 | Pushkar   | M      | Kanpur    | pushkar@yahoo.com   |
+| 1901ME02 | Sakshi    | F      | Kanpur    | sakshi@yahoo.com    |
++----------+-----------+--------+-----------+---------------------+
+
+//Enrolled table after adding relevant values
+
+mysql> select * from enrolled;
++----------+-------+------+
+| RollNo   | CCode | yoe  |
++----------+-------+------+
+| 1901CS01 | CS204 | 2020 |
+| 1901CS01 | CS305 | 2021 |
+| 1901CS01 | CS310 | 2021 |
+| 1901CS01 | CS561 | 2020 |
+| 1901CS02 | CS204 | 2020 |
+| 1901CS02 | CS225 | 2020 |
+| 1901CS02 | CS310 | 2020 |
+| 1901CS02 | CS555 | 2020 |
+| 1901CS02 | CS561 | 2020 |
+| 1901CS02 | CS599 | 2020 |
+| 1901CS03 | CS204 | 2020 |
+| 1901CS03 | CS305 | 2021 |
+| 1901CS04 | CS204 | 2019 |
+| 1901CS04 | CS225 | 2020 |
+| 1901CS04 | CS307 | 2021 |
+| 1901CS04 | CS310 | 2020 |
+| 1901CS04 | CS354 | 2021 |
+| 1901CS04 | CS561 | 2021 |
+| 1901CS05 | CS204 | 2020 |
+| 1901CS05 | CS555 | 2020 |
+| 1901CS06 | CS204 | 2020 |
+| 1901CS06 | CS225 | 2019 |
+| 1901CS06 | CS307 | 2018 |
+| 1901CS06 | CS308 | 2021 |
+| 1901CS06 | CS309 | 2021 |
+| 1901CS06 | CS310 | 2021 |
+| 1901CS08 | CS204 | 2020 |
+| 1901CS08 | CS309 | 2021 |
+| 1901CS08 | CS561 | 2021 |
+| 1901CS09 | CS204 | 2020 |
+| 1901CS09 | CS225 | 2020 |
+| 1901CS09 | CS309 | 2020 |
+| 1901CS09 | CS599 | 2020 |
+| 1901CS10 | CS307 | 2021 |
+| 1901CS10 | CS310 | 2021 |
+| 1901CS10 | CS599 | 2021 |
+| 1901CS99 | CS306 | 2019 |
+| 1901CS99 | CS599 | 2019 |
+| 1901ME01 | ME501 | 2021 |
+| 1901ME02 | ME102 | 2017 |
++----------+-------+------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 2a)
+
+//Find the name of all the students whose email ids have “gmail.com” or “yahoo.com” as the domain name
+
+mysql> select SName from Student where Email like '%gmail.com' or Email like '%yahoo.com';
++-----------+
+| SName     |
++-----------+
+| Aman      |
+| Amit      |
+| Harshita  |
+| Himanshu  |
+| Riya      |
+| Shubham   |
+| Siddharth |
+| Vijaya    |
+| Kavya     |
+| Gaurav    |
+| Pushkar   |
+| Sakshi    |
++-----------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 2b)
+
+//Find the students who have taken CS561as elective but have not taken CS555 as an elective so far
+
+mysql> select * from Student where RollNo in
+    -> (select RollNo from Enrolled where CCode="CS561" and RollNo not in (select RollNo from Enrolled where CCode="CS555"));
++----------+-----------+--------+---------+--------------------+
+| RollNo   | SName     | Gender | City    | Email              |
++----------+-----------+--------+---------+--------------------+
+| 1901CS01 | Aman      | M      | Delhi   | aman@gmail.com     |
+| 1901CS04 | Himanshu  | M      | Mumbai  | himanshu@yahoo.com |
+| 1901CS08 | Siddharth | M      | Kolkata | sid@gmail.com      |
++----------+-----------+--------+---------+--------------------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+#Question 2c)
+
+// Find the rollno of students who have enrolled in more than 4 courses in the year 2020
+
+mysql> select RollNo from Student where RollNo in
+    -> (select RollNo from Enrolled where YoE=2020 group by RollNo having count(CCode)>4);
++----------+
+| RollNo   |
++----------+
+| 1901CS02 |
++----------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 2d)
+
+//Find the number of enrolled students in course CS599 in the year 2021, 2020 and 2019.
+
+mysql> select YoE, Count(distinct RollNo) from Enrolled
+    -> where CCode="CS599" group by YoE;
++------+------------------------+
+| YoE  | Count(distinct RollNo) |
++------+------------------------+
+| 2019 |                      1 |
+| 2020 |                      2 |
+| 2021 |                      1 |
++------+------------------------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 2e)
+
+//Find the CCode of the elective courses and the number of enrolled students in the year of enrolment of 2021 only
+
+mysql> Select Enrolled.CCode,Count(distinct RollNo) from
+    -> Enrolled inner join Course on Course.CCode= Enrolled.CCode where YoE=2021 and CType="Elective" group by Enrolled.CCode;
++-------+------------------------+
+| CCode | Count(distinct RollNo) |
++-------+------------------------+
+| CS310 |                      3 |
+| CS561 |                      2 |
+| CS599 |                      1 |
+| ME501 |                      1 |
++-------+------------------------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 2f)
+
+//Find the city with maximum number of students
+
+mysql> select City from Student group by City
+    -> having Count(*)=(select max(cnt) from (Select Count(*) as cnt from Student group by City) as temp);
++-------+
+| City  |
++-------+
+| Delhi |
++-------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 2g)
+
+// Find the rollno of the students who have enrolled to 20 credits so far
+
+mysql> select RollNo from
+    -> (select RollNo, sum(Credit) as total from
+    -> Enrolled inner join Course on Course.CCode=Enrolled.CCode
+    -> group by RollNo having total>=20) as temp;
++----------+
+| RollNo   |
++----------+
+| 1901CS01 |
+| 1901CS02 |
+| 1901CS04 |
+| 1901CS06 |
+| 1901CS09 |
++----------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 2h)
+
+//Find the course code which is taken by most number of female students who are from Delhi city
+
+mysql> Select CCode,Count(Enrolled.Rollno) from Enrolled, Student where Student.rollno = Enrolled.rollno and
+    -> gender = 'F' and city = 'Delhi'
+    -> group by CCode having count(Enrolled.rollno) = (select max(cnt) from
+    -> (Select CCode,Count(Enrolled.rollno) as cnt from Enrolled , Student
+    -> where Student.rollno = Enrolled.rollno and gender = 'F' and city = 'Delhi' group by CCode) as temp );
++-------+------------------------+
+| CCode | Count(Enrolled.Rollno) |
++-------+------------------------+
+| CS204 |                      1 |
+| CS225 |                      1 |
+| CS309 |                      1 |
+| CS599 |                      1 |
++-------+------------------------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 2i)
+
+//Find the elective course code with maximum credit
+
+mysql> Select CCode from Course
+    -> where CType = 'Elective' and Credit = (Select max(credit) from Course where CType = 'Elective');
++-------+
+| CCode |
++-------+
+| CS555 |
++-------+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+
+
+#Question 2j)
+
+// Find the course details for the courses which are enrolled by least number of students so far
+
+mysql> select * from Course where CCode in
+    -> (select CCode from Enrolled group by CCode having count(*)=
+    -> (select min(cnt) from (select count(*) as cnt from Enrolled group by CCode) as temp));
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS306 | DataStr          |      7 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS354 | Database Systems |      8 | Core          |
+| ME102 | Mechanics        |      3 | Core          |
+| ME501 | Thermodynamics   |      4 | Elective      |
++-------+------------------+--------+---------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

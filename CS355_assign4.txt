@@ -1,0 +1,407 @@
+//Name: Siddharth Sanskritayan
+//Roll: 1901CS75
+//Assignment: 4
+
+
+//Initial Tables
+
+//Student Table
+
+mysql> select * from Student;
++----------+-----------+--------+-----------+---------------------+
+| RollNo   | SName     | Gender | City      | Email               |
++----------+-----------+--------+-----------+---------------------+
+| 1901CS01 | Aman      | M      | Delhi     | aman@gmail.com      |
+| 1901CS02 | Amit      | M      | Delhi     | amit@gmail.com      |
+| 1901CS03 | Harshita  | F      | Patna     | harshita@yahoo.com  |
+| 1901CS04 | Himanshu  | M      | Mumbai    | himanshu@yahoo.com  |
+| 1901CS05 | Prakhar   | M      | Pune      | prakhar@outlook.com |
+| 1901CS06 | Riya      | F      | Kolkata   | riya@gmail.com      |
+| 1901CS07 | Shubham   | M      | Patna     | shubh@yahoo.com     |
+| 1901CS08 | Siddharth | M      | Kolkata   | sid@gmail.com       |
+| 1901CS09 | Vijaya    | F      | Delhi     | vijaya@gmail.com    |
+| 1901CS10 | Vineeta   | F      | Mumbai    | vineeta@outlook.com |
+| 1901CS11 | Kavya     | F      | Delhi     | kavya@yahoo.com     |
+| 1901CS12 | Bob       | M      | Kolkata   | bob@yahoo.com       |
+| 1901CS13 | Naman     | M      | Pune      | naman@gmail.com     |
+| 1901CS99 | Ritwik    | M      | Bangalore | ritwik@outlook.com  |
+| 1901EE02 | Gaurav    | M      | Patna     | gaurav@gmail.com    |
+| 1901ME01 | Pushkar   | M      | Kanpur    | pushkar@yahoo.com   |
+| 1901ME02 | Sakshi    | F      | Kanpur    | sakshi@yahoo.com    |
++----------+-----------+--------+-----------+---------------------+
+
+//Course Table
+
+mysql> select * from Course;
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       |      8 | Core          |
+| CS225 | DataSc           |      6 | Open Elective |
+| CS244 | Maths            |      7 | Open Elective |
+| CS305 | OOPS             |      4 | Core          |
+| CS306 | DataStr          |      7 | Core          |
+| CS307 | Networks         |      5 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS309 | OS               |      3 | Core          |
+| CS310 | Python           |      5 | Elective      |
+| CS354 | Database Systems |      8 | Core          |
+| CS555 | Automata Theory  |      6 | Elective      |
+| CS561 | Architecture     |      5 | Elective      |
+| CS599 | Architecture Lab |      3 | Elective      |
+| ME102 | Mechanics        |      3 | Core          |
+| ME501 | Thermodynamics   |      4 | Elective      |
+| ME502 | Fluids           |      5 | Open Elective |
+| ME503 | Rotation         |      4 | Elective      |
++-------+------------------+--------+---------------+
+
+//Enrolled Table
+
+mysql> select * from enrolled;
++----------+-------+------+
+| RollNo   | CCode | yoe  |
++----------+-------+------+
+| 1901CS01 | CS204 | 2020 |
+| 1901CS01 | CS305 | 2021 |
+| 1901CS01 | CS310 | 2021 |
+| 1901CS01 | CS561 | 2020 |
+| 1901CS02 | CS204 | 2020 |
+| 1901CS02 | CS225 | 2020 |
+| 1901CS02 | CS310 | 2020 |
+| 1901CS02 | CS555 | 2020 |
+| 1901CS02 | CS561 | 2020 |
+| 1901CS02 | CS599 | 2020 |
+| 1901CS03 | CS204 | 2020 |
+| 1901CS03 | CS305 | 2021 |
+| 1901CS04 | CS204 | 2019 |
+| 1901CS04 | CS225 | 2020 |
+| 1901CS04 | CS307 | 2021 |
+| 1901CS04 | CS310 | 2020 |
+| 1901CS04 | CS354 | 2021 |
+| 1901CS04 | CS561 | 2021 |
+| 1901CS05 | CS204 | 2020 |
+| 1901CS05 | CS555 | 2020 |
+| 1901CS06 | CS204 | 2020 |
+| 1901CS06 | CS225 | 2019 |
+| 1901CS06 | CS307 | 2018 |
+| 1901CS06 | CS308 | 2021 |
+| 1901CS06 | CS309 | 2021 |
+| 1901CS06 | CS310 | 2021 |
+| 1901CS08 | CS204 | 2020 |
+| 1901CS08 | CS309 | 2021 |
+| 1901CS08 | CS561 | 2021 |
+| 1901CS09 | CS204 | 2020 |
+| 1901CS09 | CS225 | 2020 |
+| 1901CS09 | CS309 | 2020 |
+| 1901CS09 | CS599 | 2020 |
+| 1901CS10 | CS307 | 2021 |
+| 1901CS10 | CS310 | 2021 |
+| 1901CS10 | CS599 | 2021 |
+| 1901CS99 | CS306 | 2019 |
+| 1901CS99 | CS599 | 2019 |
+| 1901ME01 | ME501 | 2021 |
+| 1901ME02 | ME102 | 2017 |
++----------+-------+------+
+
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+Question #1)
+
+//For each RollNo of Students table, extract only the last four characters
+
+mysql> select right(RollNo, 4) as RollNo from Student;
++--------+
+| RollNo |
++--------+
+| CS01   |
+| CS02   |
+| CS03   |
+| CS04   |
+| CS05   |
+| CS06   |
+| CS07   |
+| CS08   |
+| CS09   |
+| CS10   |
+| CS11   |
+| CS12   |
+| CS13   |
+| CS99   |
+| EE02   |
+| ME01   |
+| ME02   |
++--------+
+17 rows in set (0.01 sec)
+
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+Question #2)
+
+//For each entry of Enorlled table, display RollNo, CCode, YoE and Combination
+
+mysql> select *, concat(left(RollNo,4),'@',right(CCode,3),'#',YoE) as Combination from enrolled;
++----------+-------+------+---------------+
+| RollNo   | CCode | yoe  | Combination   |
++----------+-------+------+---------------+
+| 1901CS01 | CS204 | 2020 | 1901@204#2020 |
+| 1901CS01 | CS305 | 2021 | 1901@305#2021 |
+| 1901CS01 | CS310 | 2021 | 1901@310#2021 |
+| 1901CS01 | CS561 | 2020 | 1901@561#2020 |
+| 1901CS02 | CS204 | 2020 | 1901@204#2020 |
+| 1901CS02 | CS225 | 2020 | 1901@225#2020 |
+| 1901CS02 | CS310 | 2020 | 1901@310#2020 |
+| 1901CS02 | CS555 | 2020 | 1901@555#2020 |
+| 1901CS02 | CS561 | 2020 | 1901@561#2020 |
+| 1901CS02 | CS599 | 2020 | 1901@599#2020 |
+| 1901CS03 | CS204 | 2020 | 1901@204#2020 |
+| 1901CS03 | CS305 | 2021 | 1901@305#2021 |
+| 1901CS04 | CS204 | 2019 | 1901@204#2019 |
+| 1901CS04 | CS225 | 2020 | 1901@225#2020 |
+| 1901CS04 | CS307 | 2021 | 1901@307#2021 |
+| 1901CS04 | CS310 | 2020 | 1901@310#2020 |
+| 1901CS04 | CS354 | 2021 | 1901@354#2021 |
+| 1901CS04 | CS561 | 2021 | 1901@561#2021 |
+| 1901CS05 | CS204 | 2020 | 1901@204#2020 |
+| 1901CS05 | CS555 | 2020 | 1901@555#2020 |
+| 1901CS06 | CS204 | 2020 | 1901@204#2020 |
+| 1901CS06 | CS225 | 2019 | 1901@225#2019 |
+| 1901CS06 | CS307 | 2018 | 1901@307#2018 |
+| 1901CS06 | CS308 | 2021 | 1901@308#2021 |
+| 1901CS06 | CS309 | 2021 | 1901@309#2021 |
+| 1901CS06 | CS310 | 2021 | 1901@310#2021 |
+| 1901CS08 | CS204 | 2020 | 1901@204#2020 |
+| 1901CS08 | CS309 | 2021 | 1901@309#2021 |
+| 1901CS08 | CS561 | 2021 | 1901@561#2021 |
+| 1901CS09 | CS204 | 2020 | 1901@204#2020 |
+| 1901CS09 | CS225 | 2020 | 1901@225#2020 |
+| 1901CS09 | CS309 | 2020 | 1901@309#2020 |
+| 1901CS09 | CS599 | 2020 | 1901@599#2020 |
+| 1901CS10 | CS307 | 2021 | 1901@307#2021 |
+| 1901CS10 | CS310 | 2021 | 1901@310#2021 |
+| 1901CS10 | CS599 | 2021 | 1901@599#2021 |
+| 1901CS99 | CS306 | 2019 | 1901@306#2019 |
+| 1901CS99 | CS599 | 2019 | 1901@599#2019 |
+| 1901ME01 | ME501 | 2021 | 1901@501#2021 |
+| 1901ME02 | ME102 | 2017 | 1901@102#2017 |
++----------+-------+------+---------------+
+40 rows in set (0.00 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+Question #3)
+
+//For each entry of Students table, display the RollNo by replacing the "CS" string of RollNo with "CSE" string
+
+mysql> select replace(RollNo,'CS','CSE') as Rollno, SName, City, Gender,Email from Student;
++-----------+-----------+-----------+--------+---------------------+
+| Rollno    | SName     | City      | Gender | Email               |
++-----------+-----------+-----------+--------+---------------------+
+| 1901CSE01 | Aman      | Delhi     | M      | aman@gmail.com      |
+| 1901CSE02 | Amit      | Delhi     | M      | amit@gmail.com      |
+| 1901CSE03 | Harshita  | Patna     | F      | harshita@yahoo.com  |
+| 1901CSE04 | Himanshu  | Mumbai    | M      | himanshu@yahoo.com  |
+| 1901CSE05 | Prakhar   | Pune      | M      | prakhar@outlook.com |
+| 1901CSE06 | Riya      | Kolkata   | F      | riya@gmail.com      |
+| 1901CSE07 | Shubham   | Patna     | M      | shubh@yahoo.com     |
+| 1901CSE08 | Siddharth | Kolkata   | M      | sid@gmail.com       |
+| 1901CSE09 | Vijaya    | Delhi     | F      | vijaya@gmail.com    |
+| 1901CSE10 | Vineeta   | Mumbai    | F      | vineeta@outlook.com |
+| 1901CSE11 | Kavya     | Delhi     | F      | kavya@yahoo.com     |
+| 1901CSE12 | Bob       | Kolkata   | M      | bob@yahoo.com       |
+| 1901CSE13 | Naman     | Pune      | M      | naman@gmail.com     |
+| 1901CSE99 | Ritwik    | Bangalore | M      | ritwik@outlook.com  |
+| 1901EE02  | Gaurav    | Patna     | M      | gaurav@gmail.com    |
+| 1901ME01  | Pushkar   | Kanpur    | M      | pushkar@yahoo.com   |
+| 1901ME02  | Sakshi    | Kanpur    | F      | sakshi@yahoo.com    |
++-----------+-----------+-----------+--------+---------------------+
+17 rows in set (0.01 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+Question #4)
+
+//While showing the domain of email id of Students table, replace the ".com" with ".co.in"
+
+mysql> select RollNo, SName, City, Gender, replace(Email,'.com','.co.in') as Email from Student;
++----------+-----------+-----------+--------+-----------------------+
+| RollNo   | SName     | City      | Gender | Email                 |
++----------+-----------+-----------+--------+-----------------------+
+| 1901CS01 | Aman      | Delhi     | M      | aman@gmail.co.in      |
+| 1901CS02 | Amit      | Delhi     | M      | amit@gmail.co.in      |
+| 1901CS03 | Harshita  | Patna     | F      | harshita@yahoo.co.in  |
+| 1901CS04 | Himanshu  | Mumbai    | M      | himanshu@yahoo.co.in  |
+| 1901CS05 | Prakhar   | Pune      | M      | prakhar@outlook.co.in |
+| 1901CS06 | Riya      | Kolkata   | F      | riya@gmail.co.in      |
+| 1901CS07 | Shubham   | Patna     | M      | shubh@yahoo.co.in     |
+| 1901CS08 | Siddharth | Kolkata   | M      | sid@gmail.co.in       |
+| 1901CS09 | Vijaya    | Delhi     | F      | vijaya@gmail.co.in    |
+| 1901CS10 | Vineeta   | Mumbai    | F      | vineeta@outlook.co.in |
+| 1901CS11 | Kavya     | Delhi     | F      | kavya@yahoo.co.in     |
+| 1901CS12 | Bob       | Kolkata   | M      | bob@yahoo.co.in       |
+| 1901CS13 | Naman     | Pune      | M      | naman@gmail.co.in     |
+| 1901CS99 | Ritwik    | Bangalore | M      | ritwik@outlook.co.in  |
+| 1901EE02 | Gaurav    | Patna     | M      | gaurav@gmail.co.in    |
+| 1901ME01 | Pushkar   | Kanpur    | M      | pushkar@yahoo.co.in   |
+| 1901ME02 | Sakshi    | Kanpur    | F      | sakshi@yahoo.co.in    |
++----------+-----------+-----------+--------+-----------------------+
+17 rows in set (0.00 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+Question #5)
+
+//For each CCode of Course table, display the CCode, Credit and the Credit_in_star
+
+mysql> select CCode, Credit, repeat("*",Credit) as Credit_in_star from Course;
++-------+--------+----------------+
+| CCode | Credit | Credit_in_star |
++-------+--------+----------------+
+| CS204 |      8 | ********       |
+| CS225 |      6 | ******         |
+| CS244 |      7 | *******        |
+| CS305 |      4 | ****           |
+| CS306 |      7 | *******        |
+| CS307 |      5 | *****          |
+| CS308 |      6 | ******         |
+| CS309 |      3 | ***            |
+| CS310 |      5 | *****          |
+| CS354 |      8 | ********       |
+| CS555 |      6 | ******         |
+| CS561 |      5 | *****          |
+| CS599 |      3 | ***            |
+| ME102 |      3 | ***            |
+| ME501 |      4 | ****           |
+| ME502 |      5 | *****          |
+| ME503 |      4 | ****           |
++-------+--------+----------------+
+17 rows in set (0.00 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+Question #6)
+
+// For each student name, find the name which is a palindrom
+
+mysql> select SName from Student where lcase(SName) = lcase(reverse(SName));
++-------+
+| SName |
++-------+
+| Bob   |
+| Naman |
++-------+
+2 rows in set (0.01 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+Question #7)
+
+//) Create a CS354EnrolledList table with same set of attribute as available in Student table and
+//insert all students‟ details into it who have enrolled to CS354 course
+
+mysql> create table CS354EnrolledList as
+    -> select * from Student where RollNo in (select distinct RollNo from Enrolled where CCode="CS354");
+Query OK, 1 row affected (0.08 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+
+//displaying the table
+
+mysql> select * from CS354EnrolledList;
++----------+----------+--------+--------+--------------------+
+| RollNo   | SName    | Gender | City   | Email              |
++----------+----------+--------+--------+--------------------+
+| 1901CS04 | Himanshu | M      | Mumbai | himanshu@yahoo.com |
++----------+----------+--------+--------+--------------------+
+1 row in set (0.00 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+Question #8)
+
+//Find the RollNo of the students who have enrolled to all courses available in Course table
+
+mysql> select RollNo from Enrolled group by RollNo
+    -> having count(distinct CCode)= (select count(*) from Course);
+Empty set (0.02 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+Question #9)
+
+// Create a view to list the courses which have not been enrolled by any students so far
+
+mysql> create view NotEnrolled as
+    -> select * from Course where CCode not in (select distinct CCode from Enrolled);
+Query OK, 0 rows affected (0.01 sec)
+
+
+//displaying the view
+
+mysql> select * from NotEnrolled;
++-------+----------+--------+---------------+
+| CCode | CName    | Credit | CType         |
++-------+----------+--------+---------------+
+| CS244 | Maths    |      7 | Open Elective |
+| ME502 | Fluids   |      5 | Open Elective |
+| ME503 | Rotation |      4 | Elective      |
++-------+----------+--------+---------------+
+3 rows in set (0.01 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+Question #10)
+
+// Create a view to show the list of Students who have enrolled to atleast 5 courses in a year
+
+mysql> create view Enrolled_atleast_5 as
+    -> select * from Student where RollNo in
+    -> (select RollNo from Enrolled group by RollNo,YoE
+    -> having count(CCode)>=5);
+Query OK, 0 rows affected (0.02 sec)
+
+
+//displaying the view
+
+mysql> select * from Enrolled_atleast_5;
++----------+-------+--------+-------+----------------+
+| RollNo   | SName | Gender | City  | Email          |
++----------+-------+--------+-------+----------------+
+| 1901CS02 | Amit  | M      | Delhi | amit@gmail.com |
++----------+-------+--------+-------+----------------+
+1 row in set (0.00 sec)
+
+
+
+
+

@@ -1,0 +1,533 @@
+//Name: Siddharth Sanskritayan
+//Roll: 1901CS75
+//Assignment: 5
+
+//Initial tables
+
+mysql> select * from student;
++----------+-----------+--------+-----------+---------------------+
+| RollNo   | SName     | Gender | City      | Email               |
++----------+-----------+--------+-----------+---------------------+
+| 1901CS01 | Aman      | M      | Delhi     | aman@gmail.com      |
+| 1901CS02 | Amit      | M      | Delhi     | amit@gmail.com      |
+| 1901CS03 | Harshita  | F      | Patna     | harshita@yahoo.com  |
+| 1901CS04 | Himanshu  | M      | Mumbai    | himanshu@yahoo.com  |
+| 1901CS05 | Prakhar   | M      | Pune      | prakhar@outlook.com |
+| 1901CS06 | Riya      | F      | Kolkata   | riya@gmail.com      |
+| 1901CS07 | Shubham   | M      | Patna     | shubh@yahoo.com     |
+| 1901CS08 | Siddharth | M      | Kolkata   | sid@gmail.com       |
+| 1901CS09 | Vijaya    | F      | Delhi     | vijaya@gmail.com    |
+| 1901CS10 | Vineeta   | F      | Mumbai    | vineeta@outlook.com |
+| 1901CS11 | Kavya     | F      | Delhi     | kavya@yahoo.com     |
+| 1901CS12 | Bob       | M      | Kolkata   | bob@yahoo.com       |
+| 1901CS13 | Naman     | M      | Pune      | naman@gmail.com     |
+| 1901CS99 | Ritwik    | M      | Bangalore | ritwik@outlook.com  |
+| 1901EE02 | Gaurav    | M      | Patna     | gaurav@gmail.com    |
+| 1901ME01 | Pushkar   | M      | Kanpur    | pushkar@yahoo.com   |
+| 1901ME02 | Sakshi    | F      | Kanpur    | sakshi@yahoo.com    |
++----------+-----------+--------+-----------+---------------------+
+17 rows in set (0.00 sec)
+
+
+mysql> select * from Course;
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       |      8 | Core          |
+| CS225 | DataSc           |      6 | Open Elective |
+| CS244 | Maths            |      7 | Open Elective |
+| CS305 | OOPS             |      4 | Core          |
+| CS306 | DataStr          |      7 | Core          |
+| CS307 | Networks         |      5 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS309 | OS               |      3 | Core          |
+| CS310 | Python           |      5 | Elective      |
+| CS354 | Database Systems |      8 | Core          |
+| CS355 | Compiler         |      6 | Core          |
+| CS555 | Automata Theory  |      6 | Elective      |
+| CS561 | Architecture     |      5 | Elective      |
+| CS599 | Architecture Lab |      3 | Elective      |
+| ME102 | Mechanics        |      3 | Core          |
+| ME501 | Thermodynamics   |      4 | Elective      |
+| ME502 | Fluids           |      5 | Open Elective |
+| ME503 | Rotation         |      4 | Elective      |
++-------+------------------+--------+---------------+
+18 rows in set (0.00 sec)
+
+
+mysql> select * from Enrolled;
++----------+-------+------+
+| RollNo   | CCode | yoe  |
++----------+-------+------+
+| 1901CS01 | CS204 | 2020 |
+| 1901CS01 | CS305 | 2021 |
+| 1901CS01 | CS310 | 2021 |
+| 1901CS01 | CS561 | 2020 |
+| 1901CS02 | CS204 | 2020 |
+| 1901CS02 | CS225 | 2020 |
+| 1901CS02 | CS310 | 2020 |
+| 1901CS02 | CS555 | 2020 |
+| 1901CS02 | CS561 | 2020 |
+| 1901CS02 | CS599 | 2020 |
+| 1901CS03 | CS204 | 2020 |
+| 1901CS03 | CS305 | 2021 |
+| 1901CS04 | CS204 | 2019 |
+| 1901CS04 | CS225 | 2020 |
+| 1901CS04 | CS307 | 2021 |
+| 1901CS04 | CS310 | 2020 |
+| 1901CS04 | CS354 | 2021 |
+| 1901CS04 | CS561 | 2021 |
+| 1901CS05 | CS204 | 2020 |
+| 1901CS05 | CS555 | 2020 |
+| 1901CS06 | CS204 | 2020 |
+| 1901CS06 | CS225 | 2019 |
+| 1901CS06 | CS307 | 2018 |
+| 1901CS06 | CS308 | 2021 |
+| 1901CS06 | CS309 | 2021 |
+| 1901CS06 | CS310 | 2021 |
+| 1901CS08 | CS204 | 2020 |
+| 1901CS08 | CS309 | 2021 |
+| 1901CS08 | CS561 | 2021 |
+| 1901CS09 | CS204 | 2020 |
+| 1901CS09 | CS225 | 2020 |
+| 1901CS09 | CS309 | 2020 |
+| 1901CS09 | CS599 | 2020 |
+| 1901CS10 | CS307 | 2021 |
+| 1901CS10 | CS310 | 2021 |
+| 1901CS10 | CS599 | 2021 |
+| 1901CS99 | CS306 | 2019 |
+| 1901CS99 | CS599 | 2019 |
+| 1901ME01 | ME501 | 2021 |
+| 1901ME02 | ME102 | 2017 |
++----------+-------+------+
+40 rows in set (0.01 sec)
+
+//-----------------------------------------------------------------------------------
+
+TASK A)
+
+//Add DoB (Date of Birth as date datatype) attribute in Students relation
+
+mysql> alter table Student add DoB date;
+
+
+//Add DoE (Date of Enrollment as date datatype) attribute in Enrolled relation
+
+mysql> alter table Enrolled add DoE date;
+
+
+
+//Filling DoB column in Student with relevant values.
+
+mysql> update Student set DoB= '2001-05-30'
+    -> where RollNo in ('1901CS01','1901CS05','1901CS09','1901CS13');
+
+mysql> update Student set DoB= '2001-12-06'
+    -> where RollNo in ('1901CS02','1901CS12','1901EE02');
+
+mysql> update Student set DoB= '2000-11-15'
+    -> where RollNo in ('1901CS03','1901CS07','1901CS08','1901ME01');
+
+mysql> update Student set DoB= '2000-02-28'
+    -> where RollNo in ('1901CS04','1901CS06','1901CS10','1901ME02');
+
+mysql> update Student set DoB= '1999-07-16'
+    -> where RollNo in ('1901CS11','1901CS99');
+
+
+
+//Filling DoE column in Enrolled with relevant values.
+
+mysql> update Enrolled set DoE = '2021-07-15'
+    -> where RollNo in ('1901CS02','1901CS04','1901CS06');
+
+mysql> update Enrolled set DoE = '2020-12-31'
+    -> where RollNo in ('1901CS10','1901CS99');
+
+mysql> update Enrolled set DoE = '2021-03-20'
+    -> where RollNo in ('1901ME01','1901CS08');
+
+mysql> update Enrolled set DoE = '2020-02-25'
+    -> where RollNo in ('1901CS01','1901ME02');
+
+
+
+//Removing column YoE from table Enrolled
+//First dropping primary key
+
+mysql>  alter table Enrolled drop primary key;
+mysql> alter table Enrolled drop YoE;
+
+
+
+//making RollNo,CCode and DoE combination primary key of Enrolled.
+
+mysql> alter table Enrolled
+    -> add primary key(RollNo,CCode,DoE);
+
+
+//Adding few more values to Enrolled
+
+mysql> insert into Enrolled values
+    -> ('1901CS01','CS354','2020-02-25');
+
+mysql> insert into Enrolled values
+    -> ('1901CS01','CS355','2020-12-31');
+
+mysql> insert into Enrolled values
+    -> ('1901CS02','CS354','2019-07-18');
+
+//----------------------------------------------------------------------------------------
+
+//Now the updated values of the tables are:
+
+//Student table:
+
+mysql> select * from Student;
++----------+-----------+--------+-----------+---------------------+------------+
+| RollNo   | SName     | Gender | City      | Email               | DoB        |
++----------+-----------+--------+-----------+---------------------+------------+
+| 1901CS01 | Aman      | M      | Delhi     | aman@gmail.com      | 2001-05-30 |
+| 1901CS02 | Amit      | M      | Delhi     | amit@gmail.com      | 2001-12-06 |
+| 1901CS03 | Harshita  | F      | Patna     | harshita@yahoo.com  | 2000-11-15 |
+| 1901CS04 | Himanshu  | M      | Mumbai    | himanshu@yahoo.com  | 2000-02-28 |
+| 1901CS05 | Prakhar   | M      | Pune      | prakhar@outlook.com | 2001-05-30 |
+| 1901CS06 | Riya      | F      | Kolkata   | riya@gmail.com      | 2000-02-28 |
+| 1901CS07 | Shubham   | M      | Patna     | shubh@yahoo.com     | 2000-11-15 |
+| 1901CS08 | Siddharth | M      | Kolkata   | sid@gmail.com       | 2000-11-15 |
+| 1901CS09 | Vijaya    | F      | Delhi     | vijaya@gmail.com    | 2001-05-30 |
+| 1901CS10 | Vineeta   | F      | Mumbai    | vineeta@outlook.com | 2000-02-28 |
+| 1901CS11 | Kavya     | F      | Delhi     | kavya@yahoo.com     | 1999-07-16 |
+| 1901CS12 | Bob       | M      | Kolkata   | bob@yahoo.com       | 2001-12-06 |
+| 1901CS13 | Naman     | M      | Pune      | naman@gmail.com     | 2001-05-30 |
+| 1901CS99 | Ritwik    | M      | Bangalore | ritwik@outlook.com  | 1999-07-16 |
+| 1901EE02 | Gaurav    | M      | Patna     | gaurav@gmail.com    | 2001-12-06 |
+| 1901ME01 | Pushkar   | M      | Kanpur    | pushkar@yahoo.com   | 2000-11-15 |
+| 1901ME02 | Sakshi    | F      | Kanpur    | sakshi@yahoo.com    | 2000-02-28 |
++----------+-----------+--------+-----------+---------------------+------------+
+17 rows in set (0.01 sec)
+
+
+//Course table:
+
+mysql> select * from Course;
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       |      8 | Core          |
+| CS225 | DataSc           |      6 | Open Elective |
+| CS244 | Maths            |      7 | Open Elective |
+| CS305 | OOPS             |      4 | Core          |
+| CS306 | DataStr          |      7 | Core          |
+| CS307 | Networks         |      5 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS309 | OS               |      3 | Core          |
+| CS310 | Python           |      5 | Elective      |
+| CS354 | Database Systems |      8 | Core          |
+| CS355 | Compiler         |      6 | Core          |
+| CS555 | Automata Theory  |      6 | Elective      |
+| CS561 | Architecture     |      5 | Elective      |
+| CS599 | Architecture Lab |      3 | Elective      |
+| ME102 | Mechanics        |      3 | Core          |
+| ME501 | Thermodynamics   |      4 | Elective      |
+| ME502 | Fluids           |      5 | Open Elective |
+| ME503 | Rotation         |      4 | Elective      |
++-------+------------------+--------+---------------+
+18 rows in set (0.01 sec)
+
+
+//Enrolled table:
+
+mysql> select * from Enrolled;
++----------+-------+------------+
+| RollNo   | CCode | DoE        |
++----------+-------+------------+
+| 1901CS01 | CS204 | 2020-02-25 |
+| 1901CS02 | CS204 | 2021-07-15 |
+| 1901CS03 | CS204 | 2021-01-02 |
+| 1901CS04 | CS204 | 2021-07-15 |
+| 1901CS05 | CS204 | 2021-01-02 |
+| 1901CS06 | CS204 | 2021-07-15 |
+| 1901CS08 | CS204 | 2021-03-20 |
+| 1901CS09 | CS204 | 2021-01-02 |
+| 1901CS02 | CS225 | 2021-07-15 |
+| 1901CS04 | CS225 | 2021-07-15 |
+| 1901CS06 | CS225 | 2021-07-15 |
+| 1901CS09 | CS225 | 2021-01-02 |
+| 1901CS01 | CS305 | 2020-02-25 |
+| 1901CS03 | CS305 | 2021-01-02 |
+| 1901CS99 | CS306 | 2020-12-31 |
+| 1901CS04 | CS307 | 2021-07-15 |
+| 1901CS06 | CS307 | 2021-07-15 |
+| 1901CS10 | CS307 | 2020-12-31 |
+| 1901CS06 | CS308 | 2021-07-15 |
+| 1901CS06 | CS309 | 2021-07-15 |
+| 1901CS08 | CS309 | 2021-03-20 |
+| 1901CS09 | CS309 | 2021-01-02 |
+| 1901CS01 | CS310 | 2020-02-25 |
+| 1901CS02 | CS310 | 2021-07-15 |
+| 1901CS04 | CS310 | 2021-07-15 |
+| 1901CS06 | CS310 | 2021-07-15 |
+| 1901CS10 | CS310 | 2020-12-31 |
+| 1901CS01 | CS354 | 2020-02-25 |
+| 1901CS02 | CS354 | 2019-07-18 |
+| 1901CS04 | CS354 | 2021-07-15 |
+| 1901CS01 | CS355 | 2020-12-31 |
+| 1901CS02 | CS555 | 2021-07-15 |
+| 1901CS05 | CS555 | 2021-01-02 |
+| 1901CS01 | CS561 | 2020-02-25 |
+| 1901CS02 | CS561 | 2021-07-15 |
+| 1901CS04 | CS561 | 2021-07-15 |
+| 1901CS08 | CS561 | 2021-03-20 |
+| 1901CS02 | CS599 | 2021-07-15 |
+| 1901CS09 | CS599 | 2021-01-02 |
+| 1901CS10 | CS599 | 2020-12-31 |
+| 1901CS99 | CS599 | 2020-12-31 |
+| 1901ME02 | ME102 | 2020-02-25 |
+| 1901ME01 | ME501 | 2021-03-20 |
++----------+-------+------------+
+43 rows in set (0.00 sec)
+
+//---------------------------------------------------------------------------------------------
+
+TASK B)
+
+Question #1:
+
+// Find all the details (from Student table) of the oldest male student.
+
+mysql> select * from Student
+    -> where Gender='M' and DoB=(select min(DoB) from Student where Gender='M');
++----------+--------+--------+-----------+--------------------+------------+
+| RollNo   | SName  | Gender | City      | Email              | DoB        |
++----------+--------+--------+-----------+--------------------+------------+
+| 1901CS99 | Ritwik | M      | Bangalore | ritwik@outlook.com | 1999-07-16 |
++----------+--------+--------+-----------+--------------------+------------+
+1 row in set (0.00 sec)
+
+
+//---------------------------------------------------------------------------------------------
+
+
+Question #2:
+
+//Find the course code which is/are not enrolled by any students from 1st Jan 2021 to till now
+
+mysql> select distinct CCode from Enrolled
+    -> where CCode not in (select CCode from Enrolled where DoE between '2021-01-01' and curdate());
++-------+
+| CCode |
++-------+
+| CS306 |
+| CS355 |
+| ME102 |
++-------+
+3 rows in set (0.00 sec)
+
+
+//---------------------------------------------------------------------------------------------
+
+
+Question #3:
+
+//Find the date of the year 2021 which has the maximum number of enrolment
+
+mysql> select DoE from Enrolled
+    -> where DoE like '2021%'
+    -> group by DoE having count(*) =
+    -> (select max(cnt) from (select count(*) as cnt from Enrolled where DoE like '2021%' group by DoE) as temp);
++------------+
+| DoE        |
++------------+
+| 2021-07-15 |
++------------+
+
+
+//---------------------------------------------------------------------------------------------
+
+
+Question #4:
+
+// Find the list of courses which were enrolled in July months
+
+mysql> select * from Course where CCode in
+    -> (select CCode from Enrolled where extract(month from DoE) = 7);
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       |      8 | Core          |
+| CS225 | DataSc           |      6 | Open Elective |
+| CS307 | Networks         |      5 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS309 | OS               |      3 | Core          |
+| CS310 | Python           |      5 | Elective      |
+| CS354 | Database Systems |      8 | Core          |
+| CS555 | Automata Theory  |      6 | Elective      |
+| CS561 | Architecture     |      5 | Elective      |
+| CS599 | Architecture Lab |      3 | Elective      |
++-------+------------------+--------+---------------+
+10 rows in set (0.00 sec)
+
+
+//---------------------------------------------------------------------------------------------
+
+
+Question #5:
+
+// Find the RollNo of the students who were enrolled in last 6 months (w.r.t current date)
+
+mysql> select distinct RollNo from Enrolled where datediff(curdate(),DoE) <= 180;
++----------+
+| RollNo   |
++----------+
+| 1901CS02 |
+| 1901CS04 |
+| 1901CS06 |
+| 1901CS08 |
+| 1901ME01 |
++----------+
+5 rows in set (0.01 sec)
+
+
+//---------------------------------------------------------------------------------------------
+
+
+Question #6:
+
+// Find the RollNo of students who have enrolled most recently (in terms of days from w.r.t
+// current date) in CS354 course
+
+mysql> select RollNo from Enrolled
+    -> where CCode='CS354' and DoE = (select max(DoE) from Enrolled where CCode='CS354');
++----------+
+| RollNo   |
++----------+
+| 1901CS04 |
++----------+
+1 row in set (0.00 sec)
+
+
+//---------------------------------------------------------------------------------------------
+
+
+Question #7:
+
+// Find the name of the students who have enrolled to CS354 course first and enrolled to CS355
+//course later for the year 2020
+
+mysql> select SName from Student where RollNo in
+    -> (select RollNo from
+    -> (select Rollno,DoE as d354 from Enrolled where CCode = 'CS354' and extract(year from DoE) = 2020)temp1 natural join
+    -> (select RollNo,DoE as d355 from Enrolled where CCode = 'CS355' and extract(year from DoE) = 2020)temp2
+    -> where datediff(d355,d354) >= 0);
++-------+
+| SName |
++-------+
+| Aman  |
++-------+
+
+
+//---------------------------------------------------------------------------------------------
+
+
+Question #8:
+
+//Find the most enrolled course(s) between ‘2021-01-01’ and ‘2021-06-30
+
+mysql> select CCode from Enrolled
+    -> where DoE between '2021-01-01' and '2021-06-30'
+    -> group by CCode having count(*) =
+    -> (select max(cnt) from (select count(*) as cnt from Enrolled where DoE between '2021-01-01' and '2021-06-30'
+    ->  group by CCode) as temp);
++-------+
+| CCode |
++-------+
+| CS204 |
++-------+
+1 row in set (0.00 sec)
+
+
+//---------------------------------------------------------------------------------------------
+
+
+Question #9:
+
+//Create a view with name Stud_Age that will contain two attributes RollNo and AgeInDays of
+//each student from the student table
+
+mysql> Create view Stud_Age as
+    -> select RollNo , datediff(curdate() , dob ) as Age_in_days from Student;
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> select * from Stud_Age;
++----------+-------------+
+| RollNo   | Age_in_days |
++----------+-------------+
+| 1901CS01 |        7400 |
+| 1901CS02 |        7210 |
+| 1901CS03 |        7596 |
+| 1901CS04 |        7857 |
+| 1901CS05 |        7400 |
+| 1901CS06 |        7857 |
+| 1901CS07 |        7596 |
+| 1901CS08 |        7596 |
+| 1901CS09 |        7400 |
+| 1901CS10 |        7857 |
+| 1901CS11 |        8084 |
+| 1901CS12 |        7210 |
+| 1901CS13 |        7400 |
+| 1901CS99 |        8084 |
+| 1901EE02 |        7210 |
+| 1901ME01 |        7596 |
+| 1901ME02 |        7857 |
++----------+-------------+
+17 rows in set (0.05 sec)
+
+
+//---------------------------------------------------------------------------------------------
+
+
+Question #10:
+
+// Create a view with name CS354_Enrollment which will show the number of enrolled students
+//in course CS354 in each year starting from 2018 to till now
+
+mysql> create view CS354_Enrollment as
+    -> select extract(year from DoE) as Year, count(*) as Count_Enrolled from Enrolled
+    -> group by Year having Year >= 2018;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select *from CS354_Enrollment;
++------+----------------+
+| Year | Count_Enrolled |
++------+----------------+
+| 2020 |             12 |
+| 2021 |             30 |
+| 2019 |              1 |
++------+----------------+
+3 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

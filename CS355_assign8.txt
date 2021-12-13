@@ -1,0 +1,364 @@
+//1901CS75
+// Siddharth Sanskritayan
+//Assignment-8
+
+#Task 1)
+
+//Create tables 
+
+mysql> create table stateCases(
+    -> StateCode char(2),
+    -> EntryDate date,
+    -> NumofCases int not null,
+    -> constraint stateCases_pk PRIMARY KEY(StateCode,EntryDate));
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> create table overallCases(
+    -> StateCode char(2),
+    -> totalCases int);
+Query OK, 0 rows affected (0.08 sec)
+
+
+
+//Insert trigger
+
+
+mysql> delimiter $$
+mysql> create trigger after_stateCases_insert
+    -> after insert
+    -> on stateCases
+    -> for each row
+    -> begin
+    -> declare rowcount int;
+    -> select count(*) into rowcount from overallCases where overallCases.StateCode = new.StateCode;
+    -> if rowcount >0 then
+    -> update overallCases
+    -> set totalCases = totalCases + new.NumofCases
+    -> where overallCases.StateCode = new.StateCode;
+    -> else
+    -> insert into overallCases values(new.StateCode, new.NumofCases);
+    -> end if;
+    -> end
+    -> $$
+Query OK, 0 rows affected (0.08 sec)
+
+
+
+//Update trigger
+
+mysql> create trigger after_stateCases_update
+    -> after update
+    -> on stateCases
+    -> for each row
+    -> begin
+    -> update overallCases
+    -> set totalCases = totalCases - old.NumofCases + new.NumofCases
+    -> where overallCases.stateCode = new.StateCode;
+    -> end
+    -> $$
+Query OK, 0 rows affected (0.07 sec)
+
+
+
+//Delete trigger
+
+mysql> create trigger after_stateCases_delete
+    -> after delete
+    -> on stateCases
+    -> for each row
+    -> begin
+    -> declare rowcount int;
+    -> select count(*) into rowcount from stateCases where stateCases.StateCode = old.StateCode;
+    -> if rowcount > 0 then
+    -> update overallCases
+    -> set totalCases = totalCases - old.NumofCases
+    -> where overallCases.StateCode = old.StateCode;
+    -> else
+    -> delete from overallCases
+    -> where overallCases.StateCode = old.StateCode;
+    -> end if;
+    -> end
+    -> $$
+Query OK, 0 rows affected (0.02 sec)
+
+
+//inserting few values
+
+mysql> insert into stateCases values("BR","2021-01-01",25);
+mysql> insert into stateCases values("BR","2021-01-02",28);
+mysql> insert into stateCases values("WB","2021-01-01",12);
+mysql> insert into stateCases values("WB","2021-01-02",35);
+mysql> insert into stateCases values("WB","2021-01-03",50);
+mysql> insert into stateCases values("DL","2021-01-01",100);
+mysql> insert into stateCases values("DL","2021-01-02",110);
+mysql> insert into stateCases values("DL","2021-01-03",120);
+mysql> insert into stateCases values("DL","2021-01-04",130);
+mysql> insert into stateCases values("DL","2021-01-05",140);
+mysql> insert into stateCases values("UP","2021-01-01",230);
+
+mysql> select * from stateCases;
++-----------+------------+------------+
+| StateCode | EntryDate  | NumofCases |
++-----------+------------+------------+
+| BR        | 2021-01-01 |         25 |
+| BR        | 2021-01-02 |         28 |
+| DL        | 2021-01-01 |        100 |
+| DL        | 2021-01-02 |        110 |
+| DL        | 2021-01-03 |        120 |
+| DL        | 2021-01-04 |        130 |
+| DL        | 2021-01-05 |        140 |
+| UP        | 2021-01-01 |        230 |
+| WB        | 2021-01-01 |         12 |
+| WB        | 2021-01-02 |         35 |
+| WB        | 2021-01-03 |         50 |
++-----------+------------+------------+
+11 rows in set (0.00 sec)
+
+mysql> select * from overallCases;
++-----------+------------+
+| StateCode | totalCases |
++-----------+------------+
+| BR        |         53 |
+| WB        |         97 |
+| DL        |        600 |
+| UP        |        230 |
++-----------+------------+
+4 rows in set (0.00 sec)
+
+
+
+
+//Updating values
+
+mysql> update stateCases
+    -> set NumofCases = 20
+    -> where stateCode="BR" and EntryDate="2021-01-01";
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+mysql> select * from stateCases;
++-----------+------------+------------+
+| StateCode | EntryDate  | NumofCases |
++-----------+------------+------------+
+| BR        | 2021-01-01 |         20 |
+| BR        | 2021-01-02 |         28 |
+| DL        | 2021-01-01 |        100 |
+| DL        | 2021-01-02 |        110 |
+| DL        | 2021-01-03 |        120 |
+| DL        | 2021-01-04 |        130 |
+| DL        | 2021-01-05 |        140 |
+| UP        | 2021-01-01 |        230 |
+| WB        | 2021-01-01 |         12 |
+| WB        | 2021-01-02 |         35 |
+| WB        | 2021-01-03 |         50 |
++-----------+------------+------------+
+11 rows in set (0.01 sec)
+
+mysql> select * from overallCases;
++-----------+------------+
+| StateCode | totalCases |
++-----------+------------+
+| BR        |         48 |
+| WB        |         97 |
+| DL        |        600 |
+| UP        |        230 |
++-----------+------------+
+4 rows in set (0.00 sec)
+
+
+
+
+//Deleting values
+
+mysql> delete from StateCases
+    -> where StateCode = "DL" and EntryDate="2021-01-01";
+Query OK, 1 row affected (0.00 sec)
+
+mysql> delete from StateCases
+    -> where StateCode="UP";
+Query OK, 1 row affected (0.01 sec)
+
+
+mysql> select * from stateCases;
++-----------+------------+------------+
+| StateCode | EntryDate  | NumofCases |
++-----------+------------+------------+
+| BR        | 2021-01-01 |         20 |
+| BR        | 2021-01-02 |         28 |
+| DL        | 2021-01-02 |        110 |
+| DL        | 2021-01-03 |        120 |
+| DL        | 2021-01-04 |        130 |
+| DL        | 2021-01-05 |        140 |
+| WB        | 2021-01-01 |         12 |
+| WB        | 2021-01-02 |         35 |
+| WB        | 2021-01-03 |         50 |
++-----------+------------+------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from overallCases;
++-----------+------------+
+| StateCode | totalCases |
++-----------+------------+
+| BR        |         48 |
+| WB        |         97 |
+| DL        |        500 |
++-----------+------------+
+3 rows in set (0.00 sec)
+
+
+//----------------------------------------------------------------------------------------------------------------------
+
+#Task 2)
+
+//Creating tables
+
+mysql> create table account(
+    -> anum varchar(10) PRIMARY KEY,
+    -> name varchar(20) NOT NULL,
+    -> balance INT NOT NULL
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table accountLog(
+    -> anum varchar(10),
+    -> operation varchar(20),
+    -> dateofoperation date
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+
+
+//Inserting values
+
+mysql> insert into account values('1000','Aryan',2500);
+mysql> insert into account values('1001','Arpan',50000);
+mysql> insert into account values('1002','Mohan',5000);
+mysql> insert into account values('1003','Rohan',25000);
+mysql> insert into account values('1004','Sohan',21000);
+mysql> insert into account values('1005','Rohit',90000);
+mysql> insert into account values('1006','Mohit',9000);
+mysql> insert into account values('1007','Harsh',500);
+mysql> insert into account values('1008','Sid',75000);
+mysql> insert into account values('1009','Kunal',1500);
+
+mysql> select * from account;
++------+-------+---------+
+| anum | name  | balance |
++------+-------+---------+
+| 1000 | Aryan |    2500 |
+| 1001 | Arpan |   50000 |
+| 1002 | Mohan |    5000 |
+| 1003 | Rohan |   25000 |
+| 1004 | Sohan |   21000 |
+| 1005 | Rohit |   90000 |
+| 1006 | Mohit |    9000 |
+| 1007 | Harsh |     500 |
+| 1008 | Sid   |   75000 |
+| 1009 | Kunal |    1500 |
++------+-------+---------+
+10 rows in set (0.00 sec)
+
+
+
+
+//Withdraw function
+
+mysql> create function withdraw(anum_p varchar(10),amount_p int)
+    -> returns int
+    -> deterministic
+    -> begin
+    -> declare rowcount int;
+    -> declare bal int;
+    -> select count(*) into rowcount from account
+    -> where anum=anum_p;
+    -> if rowcount=0 then
+    -> return -1;
+    -> end if;
+    -> select balance into bal from account
+    -> where anum=anum_p;
+    -> if bal < amount_p then
+    -> return -1;
+    -> end if;
+    -> update account
+    -> set balance = bal - amount_p
+    -> where anum= anum_p;
+    -> return bal- amount_p;
+    -> end$$
+Query OK, 0 rows affected (0.01 sec)
+
+
+
+// Deposit function
+
+mysql> create function deposit(anum_p varchar(10),amount_p int)
+    -> returns int
+    -> deterministic
+    -> begin
+    -> declare rowcount int;
+    -> declare newbal int;
+    -> select count(*) into rowcount from account
+    -> where anum=anum_p;
+    -> if rowcount = 0 then
+    -> return -1;
+    -> end if;
+    -> update account
+    -> set balance= balance + amount_p
+    -> where anum=anum_p;
+    -> select balance into newbal from account
+    -> where anum= anum_p;
+    -> return newbal;
+    -> end$$
+Query OK, 0 rows affected (0.01 sec)
+
+
+
+
+//Defining trigger
+
+mysql> create trigger before_account_update
+    -> before update
+    -> on account
+    -> for each row
+    -> begin
+    -> if new.balance > old.balance then
+    -> insert into accountLog values (new.anum, concat('Deposit',new.balance - old.balance),curdate());
+    -> elseif new.balance < old.balance then
+    -> insert into accountLog values (new.anum, concat('Withdraw',old.balance - new.balance),curdate());
+    -> end if;
+    -> end
+    -> $$
+Query OK, 0 rows affected (0.03 sec)
+
+
+
+//Testing functions and trigger
+
+mysql> select withdraw('1000',500);
++----------------------+
+| withdraw('1000',500) |
++----------------------+
+|                 2000 |
++----------------------+
+1 row in set (0.01 sec)
+
+
+
+mysql> select withdraw('1007',1000);
++-----------------------+
+| withdraw('1007',1000) |
++-----------------------+
+|                    -1 |
++-----------------------+
+1 row in set (0.01 sec)
+
+
+
+mysql> select * from accountLog;
++------+--------------+-----------------+
+| anum | operation    | dateofoperation |
++------+--------------+-----------------+
+| 1001 | Deposit10000 | 2021-10-21      |
+| 1000 | Withdraw500  | 2021-10-21      |
++------+--------------+-----------------+
+2 rows in set (0.00 sec)

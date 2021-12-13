@@ -1,0 +1,544 @@
+//1901CS75
+//Siddharth Sanskritayan
+//Assignment-6
+
+//Initial tables
+
+mysql> select * from student;
++----------+-----------+--------+-----------+---------------------+
+| RollNo   | SName     | Gender | City      | Email               |
++----------+-----------+--------+-----------+---------------------+
+| 1901CS01 | Aman      | M      | Delhi     | aman@gmail.com      |
+| 1901CS02 | Amit      | M      | Delhi     | amit@gmail.com      |
+| 1901CS03 | Harshita  | F      | Patna     | harshita@yahoo.com  |
+| 1901CS04 | Himanshu  | M      | Mumbai    | himanshu@yahoo.com  |
+| 1901CS05 | Prakhar   | M      | Pune      | prakhar@outlook.com |
+| 1901CS06 | Riya      | F      | Kolkata   | riya@gmail.com      |
+| 1901CS07 | Shubham   | M      | Patna     | shubh@yahoo.com     |
+| 1901CS08 | Siddharth | M      | Kolkata   | sid@gmail.com       |
+| 1901CS09 | Vijaya    | F      | Delhi     | vijaya@gmail.com    |
+| 1901CS10 | Vineeta   | F      | Mumbai    | vineeta@outlook.com |
+| 1901CS11 | Kavya     | F      | Delhi     | kavya@yahoo.com     |
+| 1901CS12 | Bob       | M      | Kolkata   | bob@yahoo.com       |
+| 1901CS13 | Naman     | M      | Pune      | naman@gmail.com     |
+| 1901CS99 | Ritwik    | M      | Bangalore | ritwik@outlook.com  |
+| 1901EE02 | Gaurav    | M      | Patna     | gaurav@gmail.com    |
+| 1901ME01 | Pushkar   | M      | Kanpur    | pushkar@yahoo.com   |
+| 1901ME02 | Sakshi    | F      | Kanpur    | sakshi@yahoo.com    |
++----------+-----------+--------+-----------+---------------------+
+17 rows in set (0.00 sec)
+
+
+mysql> select * from Course;
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       |      8 | Core          |
+| CS225 | DataSc           |      6 | Open Elective |
+| CS244 | Maths            |      7 | Open Elective |
+| CS305 | OOPS             |      4 | Core          |
+| CS306 | DataStr          |      7 | Core          |
+| CS307 | Networks         |      5 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS309 | OS               |      3 | Core          |
+| CS310 | Python           |      5 | Elective      |
+| CS354 | Database Systems |      8 | Core          |
+| CS355 | Compiler         |      6 | Core          |
+| CS555 | Automata Theory  |      6 | Elective      |
+| CS561 | Architecture     |      5 | Elective      |
+| CS599 | Architecture Lab |      3 | Elective      |
+| ME102 | Mechanics        |      3 | Core          |
+| ME501 | Thermodynamics   |      4 | Elective      |
+| ME502 | Fluids           |      5 | Open Elective |
+| ME503 | Rotation         |      4 | Elective      |
++-------+------------------+--------+---------------+
+18 rows in set (0.00 sec)
+
+
+mysql> select * from Enrolled;
++----------+-------+------+
+| RollNo   | CCode | yoe  |
++----------+-------+------+
+| 1901CS01 | CS204 | 2020 |
+| 1901CS01 | CS305 | 2021 |
+| 1901CS01 | CS310 | 2021 |
+| 1901CS01 | CS561 | 2020 |
+| 1901CS02 | CS204 | 2020 |
+| 1901CS02 | CS225 | 2020 |
+| 1901CS02 | CS310 | 2020 |
+| 1901CS02 | CS555 | 2020 |
+| 1901CS02 | CS561 | 2020 |
+| 1901CS02 | CS599 | 2020 |
+| 1901CS03 | CS204 | 2020 |
+| 1901CS03 | CS305 | 2021 |
+| 1901CS04 | CS204 | 2019 |
+| 1901CS04 | CS225 | 2020 |
+| 1901CS04 | CS307 | 2021 |
+| 1901CS04 | CS310 | 2020 |
+| 1901CS04 | CS354 | 2021 |
+| 1901CS04 | CS561 | 2021 |
+| 1901CS05 | CS204 | 2020 |
+| 1901CS05 | CS555 | 2020 |
+| 1901CS06 | CS204 | 2020 |
+| 1901CS06 | CS225 | 2019 |
+| 1901CS06 | CS307 | 2018 |
+| 1901CS06 | CS308 | 2021 |
+| 1901CS06 | CS309 | 2021 |
+| 1901CS06 | CS310 | 2021 |
+| 1901CS08 | CS204 | 2020 |
+| 1901CS08 | CS309 | 2021 |
+| 1901CS08 | CS561 | 2021 |
+| 1901CS09 | CS204 | 2020 |
+| 1901CS09 | CS225 | 2020 |
+| 1901CS09 | CS309 | 2020 |
+| 1901CS09 | CS599 | 2020 |
+| 1901CS10 | CS307 | 2021 |
+| 1901CS10 | CS310 | 2021 |
+| 1901CS10 | CS599 | 2021 |
+| 1901CS99 | CS306 | 2019 |
+| 1901CS99 | CS599 | 2019 |
+| 1901ME01 | ME501 | 2021 |
+| 1901ME02 | ME102 | 2017 |
++----------+-------+------+
+40 rows in set (0.01 sec)
+
+//--------------------------------------------------------------------------------------------------
+
+Task A)
+
+#i) 
+//Create a new GradeWeight table. It will contain two attributes - GradeChar of char(1) type and
+//Weight smallint type. GradeChar is primary key of the table. The possible GradeChar are A,B,C,D,E,
+//and F and the corresponding weights are 5,4,3,2,1 and 0 respectively
+
+mysql> create table GradeWeight(GradeChar char(1) primary key, Weight smallint);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql>  insert into GradeWeight values ('A', 5), ('B', 4), ('C', 3), ('D', 2), ('E', 1), ('F', 0);
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from GradeWeight;
++-----------+--------+
+| GradeChar | Weight |
++-----------+--------+
+| A         |      5 |
+| B         |      4 |
+| C         |      3 |
+| D         |      2 |
+| E         |      1 |
+| F         |      0 |
++-----------+--------+
+6 rows in set (0.00 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+#ii) 
+//Also, add a grade char(1) column to Enrolled table. Update it with some relevant random
+//values except for CS355 course. 
+
+mysql>  alter table Enrolled add grade char(1);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update enrolled set grade = char(mod(round(rand() * 100),6) + 65) where CCode != 'CS355';
+Query OK, 42 rows affected (0.02 sec)
+Rows matched: 42  Changed: 42  Warnings: 0
+
+mysql> select * from Enrolled;
++----------+-------+------------+-------+
+| RollNo   | CCode | DoE        | grade |
++----------+-------+------------+-------+
+| 1901CS01 | CS204 | 2020-02-25 | F     |
+| 1901CS01 | CS305 | 2020-02-25 | D     |
+| 1901CS01 | CS310 | 2020-02-25 | A     |
+| 1901CS01 | CS354 | 2020-02-25 | F     |
+| 1901CS01 | CS355 | 2020-12-31 | NULL  |
+| 1901CS01 | CS561 | 2020-02-25 | A     |
+| 1901CS02 | CS204 | 2021-07-15 | E     |
+| 1901CS02 | CS225 | 2021-07-15 | B     |
+| 1901CS02 | CS310 | 2021-07-15 | E     |
+| 1901CS02 | CS354 | 2019-07-18 | D     |
+| 1901CS02 | CS355 | 2021-09-11 | NULL  |
+| 1901CS02 | CS555 | 2021-07-15 | D     |
+| 1901CS02 | CS561 | 2021-07-15 | D     |
+| 1901CS02 | CS599 | 2021-07-15 | B     |
+| 1901CS03 | CS204 | 2021-01-02 | B     |
+| 1901CS03 | CS305 | 2021-01-02 | B     |
+| 1901CS04 | CS204 | 2021-07-15 | A     |
+| 1901CS04 | CS225 | 2021-07-15 | C     |
+| 1901CS04 | CS307 | 2021-07-15 | C     |
+| 1901CS04 | CS310 | 2021-07-15 | E     |
+| 1901CS04 | CS354 | 2021-07-15 | A     |
+| 1901CS04 | CS561 | 2021-07-15 | F     |
+| 1901CS05 | CS204 | 2021-01-02 | E     |
+| 1901CS05 | CS555 | 2021-01-02 | C     |
+| 1901CS06 | CS204 | 2021-07-15 | D     |
+| 1901CS06 | CS225 | 2021-07-15 | A     |
+| 1901CS06 | CS307 | 2021-07-15 | A     |
+| 1901CS06 | CS308 | 2021-07-15 | E     |
+| 1901CS06 | CS309 | 2021-07-15 | A     |
+| 1901CS06 | CS310 | 2021-07-15 | D     |
+| 1901CS08 | CS204 | 2021-03-20 | C     |
+| 1901CS08 | CS309 | 2021-03-20 | C     |
+| 1901CS08 | CS561 | 2021-03-20 | F     |
+| 1901CS09 | CS204 | 2021-01-02 | A     |
+| 1901CS09 | CS225 | 2021-01-02 | D     |
+| 1901CS09 | CS309 | 2021-01-02 | F     |
+| 1901CS09 | CS599 | 2021-01-02 | C     |
+| 1901CS10 | CS307 | 2020-12-31 | E     |
+| 1901CS10 | CS310 | 2020-12-31 | F     |
+| 1901CS10 | CS355 | 2021-07-15 | NULL  |
+| 1901CS10 | CS599 | 2020-12-31 | C     |
+| 1901CS99 | CS306 | 2020-12-31 | B     |
+| 1901CS99 | CS355 | 2021-11-21 | NULL  |
+| 1901CS99 | CS599 | 2020-12-31 | C     |
+| 1901ME01 | ME501 | 2021-03-20 | E     |
+| 1901ME02 | ME102 | 2020-02-25 | C     |
++----------+-------+------------+-------+
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+#iii)
+// For2021 enrolled CS355 students, create a CS355_Marks table. It will contain two fields RollNo
+//char(8) and Marks smallint. RollNo is the key attribute. Add all the 2021 CS355 enrolled students’
+//RollNo from enrolled table to this table. Then update the Marks column using a random function
+//and the value to be updated should lie between 0 and 5. 
+
+mysql> create table CS355_Marks(RollNo char(8) primary key, Marks smallint);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql>  insert into CS355_Marks (RollNo) select distinct RollNo from enrolled where CCode = 'CS355' and left(DoE, 4) = '2021';
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from CS355_Marks;
++----------+-------+
+| RollNo   | Marks |
++----------+-------+
+| 1901CS02 |  NULL |
+| 1901CS10 |  NULL |
+| 1901CS99 |  NULL |
++----------+-------+
+
+mysql>  update CS355_Marks set Marks = floor(rand()*6);
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select * from CS355_Marks;
++----------+-------+
+| RollNo   | Marks |
++----------+-------+
+| 1901CS02 |     1 |
+| 1901CS10 |     4 |
+| 1901CS99 |     5 |
++----------+-------+
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+#iv) 
+//Add one more column GradeChar char(1) type to the CS355_Marks table after the Marks
+//column. Now based on the GradeWeight table, update this new column. Thus, if the mark of
+//1901CS99 is 4 then the GradeChar should be updated with ‘B’. 
+
+mysql>  alter table CS355_Marks add GradeChar char(1) after Marks;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update CS355_Marks set CS355_Marks.GradeChar = (select GradeWeight.GradeChar from GradeWeight where CS355_Marks.Marks = GradeWeight.Weight);
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select * from CS355_Marks;
++----------+-------+-----------+
+| RollNo   | Marks | GradeChar |
++----------+-------+-----------+
+| 1901CS02 |     1 | E         |
+| 1901CS10 |     4 | B         |
+| 1901CS99 |     5 | A         |
++----------+-------+-----------+
+3 rows in set (0.00 sec)
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+
+#v) 
+//Now create std_data.txt file with some comma separated values in the current folder from
+//where you are invoking MySQL utility. Here, the columns indicate RollNo, SName, Gender, City,
+//Email and DoB respectively. Similarly, create course_data.txt file with comma separated values in
+//the current folder from where you are invoking MySQL utility. Here the columns indicate CCode,
+//CName, Credit, CType and CCode. Each of the file should contain atleast 10 new relevant entries.
+//Load the entries of txt file in the student and course tables respectively. 
+
+
+// to enable local data loading:
+
+mysql> exit
+
+C:\Users\Siddharth>mysql --local-infile=1 -u root -p
+
+// Contents of std_data.txt
+
+1901CS14,Rohan,M,Mumbai,rohan@gmail.com,2001-05-09
+1901CS15,Mohan,M,Pune,mohan@gmail.com,2000-05-09
+1901CS16,Sohan,M,Ranchi,sohan@gmail.com,2001-11-09
+1901CS17,Simran,F,Patna,simran@gmail.com,2001-05-19
+1901CS18,Shivani,F,Mumbai,shivani@gmail.com,1999-04-09
+1901CS19,Aryan,M,Bangalore,aryan@gmail.com,2001-08-09
+1901CS20,Vinod,M,Mumbai,vinod@gmail.com,2000-07-09
+1901CS21,Ravi,M,Hyderabad,ravi@gmail.com,1999-05-09
+1901CS22,Ankita,F,Delhi,ankita@gmail.com,2001-12-08
+1901CS23,Shiv,M,Lucknow,shiv@gmail.com,2001-11-07
+
+
+// Loading contents of std_data.txt in student table
+
+mysql> load data local infile 'C:\Program Files\MySQL\MySQL Server 8.0\bin\std_data.txt' into table student fields terminated by ',' lines terminated by '\n';
+
+mysql> select * from Student;
++----------+-----------+--------+-----------+---------------------+------------+
+| RollNo   | SName     | Gender | City      | Email               | DoB        |
++----------+-----------+--------+-----------+---------------------+------------+
+| 1901CS01 | Aman      | M      | Delhi     | aman@gmail.com      | 2001-05-30 |
+| 1901CS02 | Amit      | M      | Delhi     | amit@gmail.com      | 2001-12-06 |
+| 1901CS03 | Harshita  | F      | Patna     | harshita@yahoo.com  | 2000-11-15 |
+| 1901CS04 | Himanshu  | M      | Mumbai    | himanshu@yahoo.com  | 2000-02-28 |
+| 1901CS05 | Prakhar   | M      | Pune      | prakhar@outlook.com | 2001-05-30 |
+| 1901CS06 | Riya      | F      | Kolkata   | riya@gmail.com      | 2000-02-28 |
+| 1901CS07 | Shubham   | M      | Patna     | shubh@yahoo.com     | 2000-11-15 |
+| 1901CS08 | Siddharth | M      | Kolkata   | sid@gmail.com       | 2000-11-15 |
+| 1901CS09 | Vijaya    | F      | Delhi     | vijaya@gmail.com    | 2001-05-30 |
+| 1901CS10 | Vineeta   | F      | Mumbai    | vineeta@outlook.com | 2000-02-28 |
+| 1901CS11 | Kavya     | F      | Delhi     | kavya@yahoo.com     | 1999-07-16 |
+| 1901CS12 | Bob       | M      | Kolkata   | bob@yahoo.com       | 2001-12-06 |
+| 1901CS13 | Naman     | M      | Pune      | naman@gmail.com     | 2001-05-30 |
+| 1901CS14 | Rohan     | M      | Mumbai    | rohan@gmail.com     | 2001-05-09 |
+| 1901CS15 | Mohan     | M      | Pune      | mohan@gmail.com     | 2000-05-09 |
+| 1901CS16 | Sohan     | M      | Ranchi    | sohan@gmail.com     | 2001-11-09 |
+| 1901CS17 | Simran    | F      | Patna     | simran@gmail.com    | 2001-05-19 |
+| 1901CS18 | Shivani   | F      | Mumbai    | shivani@gmail.com   | 1999-04-09 |
+| 1901CS19 | Aryan     | M      | Bangalore | aryan@gmail.com     | 2001-08-09 |
+| 1901CS20 | Vinod     | M      | Mumbai    | vinod@gmail.com     | 2000-07-09 |
+| 1901CS21 | Ravi      | M      | Hyderabad | ravi@gmail.com      | 1999-05-09 |
+| 1901CS22 | Ankita    | F      | Delhi     | ankita@gmail.com    | 2001-12-08 |
+| 1901CS23 | Shiv      | M      | Lucknow   | shiv@gmail.com      | 2001-11-07 |
+| 1901CS99 | Ritwik    | M      | Bangalore | ritwik@outlook.com  | 1999-07-16 |
+| 1901EE02 | Gaurav    | M      | Patna     | gaurav@gmail.com    | 2001-12-06 |
+| 1901ME01 | Pushkar   | M      | Kanpur    | pushkar@yahoo.com   | 2000-11-15 |
+| 1901ME02 | Sakshi    | F      | Kanpur    | sakshi@yahoo.com    | 2000-02-28 |
++----------+-----------+--------+-----------+---------------------+------------+
+
+// Contents of course_data.txt
+
+CS311,Algo Lab,6,Core
+CS312,Datastr Lab,5,Core
+CS313,Networks Lab,6,Core
+CS314,ML Lab,6,Core
+CS315,OS Lab,7,Core
+CS316,Python Lab,6,Core
+CS317,Compiler Lab,4,Core
+CS318,Automata Lab,6,Core
+CS319,DB Lab,3,Core
+CS320,OOPS Lab,6,Core
+
+mysql> load data local infile 'C:\Program Files\MySQL\MySQL Server 8.0\bin\course_data.txt' into table course fields terminated by ',' lines terminated by '\n';
+
+mysql> select * from course;
+
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       |      8 | Core          |
+| CS225 | DataSc           |      6 | Open Elective |
+| CS244 | Maths            |      7 | Open Elective |
+| CS305 | OOPS             |      4 | Core          |
+| CS306 | DataStr          |      7 | Core          |
+| CS307 | Networks         |      5 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS309 | OS               |      3 | Core          |
+| CS310 | Python           |      5 | Elective      |
+| CS311 | Algo Lab         |      6 | Core          |
+| CS312 | Datastr Lab      |      5 | Core          |
+| CS313 | Networks Lab     |      6 | Core          |
+| CS314 | ML Lab           |      6 | Core          |
+| CS315 | OS Lab           |      7 | Core          |
+| CS316 | Python Lab       |      6 | Core          |
+| CS317 | Compiler Lab     |      4 | Core          |
+| CS318 | Automata Lab     |      6 | Core          |
+| CS319 | DB Lab           |      3 | Core          |
+| CS320 | OOPS Lab         |      6 | Core          |
+| CS354 | Database Systems |      8 | Core          |
+| CS355 | Compiler         |      6 | Core          |
+| CS555 | Automata Theory  |      6 | Elective      |
+| CS561 | Architecture     |      5 | Elective      |
+| CS599 | Architecture Lab |      3 | Elective      |
+| ME102 | Mechanics        |      3 | Core          |
+| ME501 | Thermodynamics   |      4 | Elective      |
+| ME502 | Fluids           |      5 | Open Elective |
+| ME503 | Rotation         |      4 | Elective      |
++-------+------------------+--------+---------------+
+
+
+//--------------------------------------------------------------------------------------------------
+
+Task B)
+
+#1) 
+//Show the course details with credit in binary from course table
+
+mysql> select CCode, CName, conv(Credit, 10, 2) as Credit, CType from course;
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       | 1000   | Core          |
+| CS225 | DataSc           | 110    | Open Elective |
+| CS244 | Maths            | 111    | Open Elective |
+| CS305 | OOPS             | 100    | Core          |
+| CS306 | DataStr          | 111    | Core          |
+| CS307 | Networks         | 101    | Core          |
+| CS308 | ML               | 110    | Open Elective |
+| CS309 | OS               | 11     | Core          |
+| CS310 | Python           | 101    | Elective      |
+| CS311 | Algo Lab         | 110    | Core          |
+| CS312 | Datastr Lab      | 101    | Core          |
+| CS313 | Networks Lab     | 110    | Core          |
+| CS314 | ML Lab           | 110    | Core          |
+| CS315 | OS Lab           | 111    | Core          |
+| CS316 | Python Lab       | 110    | Core          |
+| CS317 | Compiler Lab     | 100    | Core          |
+| CS318 | Automata Lab     | 110    | Core          |
+| CS319 | DB Lab           | 11     | Core          |
+| CS320 | OOPS Lab         | 110    | Core          |
+| CS354 | Database Systems | 1000   | Core          |
+| CS355 | Compiler         | 110    | Core          |
+| CS555 | Automata Theory  | 110    | Elective      |
+| CS561 | Architecture     | 101    | Elective      |
+| CS599 | Architecture Lab | 11     | Elective      |
+| ME102 | Mechanics        | 11     | Core          |
+| ME501 | Thermodynamics   | 100    | Elective      |
+| ME502 | Fluids           | 101    | Open Elective |
+| ME503 | Rotation         | 100    | Elective      |
++-------+------------------+--------+---------------+
+
+mysql> select CCode, CName, conv(Credit, 10, 2) as Credit, CType from course into outfile 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/output1.txt' fields terminated by ',' lines terminated by '\n';
+
+//--------------------------------------------------------------------------------------------------
+
+
+#2) 
+//Create a view with name std_age and show the RollNo, Age_Year, Age_Months and Age_Day
+//after calculating the age of each student.
+
+mysql> create view std_age as select RollNo, timestampdiff(year, DoB, curdate()) as Age_Year, timestampdiff(month, DoB, curdate()) % 12 as Age_Months, timestampdiff(day, DoB, curdate()) % 30 as Age_Date from student;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from std_age;
++----------+----------+------------+----------+
+| RollNo   | Age_Year | Age_Months | Age_Date |
++----------+----------+------------+----------+
+| 1901CS01 |       20 |          3 |       27 |
+| 1901CS02 |       19 |          9 |       17 |
+| 1901CS03 |       20 |          9 |       13 |
+| 1901CS04 |       21 |          6 |        4 |
+| 1901CS05 |       20 |          3 |       27 |
+| 1901CS06 |       21 |          6 |        4 |
+| 1901CS07 |       20 |          9 |       13 |
+| 1901CS08 |       20 |          9 |       13 |
+| 1901CS09 |       20 |          3 |       27 |
+| 1901CS10 |       21 |          6 |        4 |
+| 1901CS11 |       22 |          1 |       21 |
+| 1901CS12 |       19 |          9 |       17 |
+| 1901CS13 |       20 |          3 |       27 |
+| 1901CS14 |       20 |          4 |       18 |
+| 1901CS15 |       21 |          4 |       23 |
+| 1901CS16 |       19 |         10 |       14 |
+| 1901CS17 |       20 |          3 |        8 |
+| 1901CS18 |       22 |          5 |       29 |
+| 1901CS19 |       20 |          1 |       16 |
+| 1901CS20 |       21 |          2 |       22 |
+| 1901CS21 |       22 |          4 |       29 |
+| 1901CS22 |       19 |          9 |       15 |
+| 1901CS23 |       19 |         10 |       16 |
+| 1901CS99 |       22 |          1 |       21 |
+| 1901EE02 |       19 |          9 |       17 |
+| 1901ME01 |       20 |          9 |       13 |
+| 1901ME02 |       21 |          6 |        4 |
++----------+----------+------------+----------+
+
+mysql> select * from std_age into outfile 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/output2.txt' fields terminated by ',' lines terminated by '\n';
+
+//--------------------------------------------------------------------------------------------------
+
+
+#3) 
+//For student with RollNo 1901CS99, obtain the CPI. This can be calculated by considering all the
+//grades each course obtained by the student, multiplying them with the corresponding credit of
+//the course, then taking the sum and divide it by the total credits done by the student.
+
+mysql> select RollNo, sum(Credit * Weight) / sum(Credit) as CPI from enrolled, course, GradeWeight where enrolled.CCode = course.CCode and enrolled.grade = GradeWeight.GradeChar group by RollNo having RollNo = '1901CS99';
++----------+--------+
+| RollNo   | CPI    |
++----------+--------+
+| 1901CS99 | 3.7000 |
++----------+--------+
+
+mysql> select RollNo, sum(Credit * Weight) / sum(Credit) as CPI from enrolled, course, GradeWeight where enrolled.CCode = course.CCode and enrolled.grade = GradeWeight.GradeChar group by RollNo having RollNo = '1901CS99' into outfile 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/output3.txt' fields terminated by ',' lines terminated by '\n';
+
+//--------------------------------------------------------------------------------------------------
+
+
+#4)
+//Create a view with name std_cpi and show the RollNo and CPI details of all students.
+
+mysql> create view std_cpi as select RollNo, sum(Credit * Weight) / sum(Credit) as CPI from enrolled, course, GradeWeight where enrolled.CCode = course.CCode AND enrolled.grade = GradeWeight.GradeChar group by RollNo;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from std_cpi;
++----------+--------+
+| RollNo   | CPI    |
++----------+--------+
+| 1901CS01 | 1.9333 |
+| 1901CS02 | 2.1220 |
+| 1901CS03 | 4.0000 |
+| 1901CS04 | 3.1892 |
+| 1901CS05 | 1.8571 |
+| 1901CS06 | 3.0909 |
+| 1901CS08 | 2.0625 |
+| 1901CS09 | 3.0500 |
+| 1901CS10 | 1.0769 |
+| 1901CS99 | 3.7000 |
+| 1901ME01 | 1.0000 |
+| 1901ME02 | 3.0000 |
++----------+--------+
+
+mysql> select * from std_cpi into outfile 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/
+
+//--------------------------------------------------------------------------------------------------
+
+
+#5) 
+//Find out the students who have obtained 5 or more number of ‘A’ grade
+
+mysql> select * from student where RollNo in (select RollNo from (select RollNo, count(grade) as count_gradeA from enrolled where grade = 'A' group by RollNo having (count_gradeA >= 5)) as temp);
+Empty set (0.01 sec)
+
+mysql> select * from student where RollNo in (select RollNo from (select RollNo, count(grade) as count_gradeA from enrolled where grade = 'A' group by RollNo having (count_gradeA >= 5)) as temp) into outfile 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/output5.txt' fields terminated by ',' lines terminated by '\n';
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+Task C)
+//After performing task A and task B, create a dump file in sql format.
+
+C:\Users\user>mysqldump --no-tablespaces -u root -p dblab --result-file=dump.sql;

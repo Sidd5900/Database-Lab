@@ -1,0 +1,57 @@
+Name: Siddharth Sanskritayan
+Roll No: 1901CS75
+
+//Go to location where MySql installed
+//cd "C:\Program Files\MySQL\MySQL Server 8.0\bin\"
+
+//To connect to MySQL server as a root user
+mysql -u root -p
+
+//to list the existing databases
+show databases;
+
+//create a new database dblab
+create database dblab;
+
+//use the database
+use dblab;
+
+//create table Student
+create table Student(Rollno varchar (10), SName varchar (10), City varchar (10));
+
+//Create table Course
+create table Course(CID varchar(10), CName varchar(10), Credit int));
+
+//insert values in the tables
+
+insert into Student values ("CS01","Aman","Delhi"),("CS02","Amit","Delhi"),("CS03","Harsh","Patna"),
+("CS04","Himanshu","Mumbai"),("CS05","Prakhar","Pune"),("CS06","Raj","Kolkata"),("CS07","Shubham","Patna"),
+("CS08","Siddharth","Kolkata"),("CS09","Vikas","Delhi"),("CS10","Yash","Bangalore");;
+
+insert into Course values("CS301","Algorithms",8),("CS302","DataSc",6),("CS303","Maths",7),
+("CS304","Database",8),("CS305","OOPS",4),("CS306","DataStr",7),("CS307","Networks",5),
+("CS308","ML",6),("CS309","OS",3),("CS310","Python",5);
+
+//Check all the entries of the tables
+select * from Student;
+select * from Course;
+
+//create a user with scot as username and tiger as password
+create user 'scot'@'localhost' identified by 'tiger';
+
+//grant all privileges to all the tables of dblab to this new user
+grant all privileges on dblab.* to 'scot'@'localhost';
+
+//exit and again open cmd, then sign in as new user scot
+mysql -u scot -p
+//Enter password: *****
+
+// check whether you are able to access the tables of dblab database
+use dblab;
+select * from Student;
+select * from Course;
+
+
+
+
+

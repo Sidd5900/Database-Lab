@@ -1,0 +1,364 @@
+//Siddharth Sanskritayan
+//1901CS75
+
+#Question 1:
+
+//create tables
+create table Student(RollNo char(8),SName varchar(20),Gender char(1),City varchar(20));
+create table Course(CCode char(5),CName varchar(20),Credit smallint);
+create table Enrolled(RollNo char(8),CCode char(5));
+
+//inserting values in tables
+insert into Student values ("1901CS01","Aman","M","Delhi"),("1901CS02","Amit","M","Delhi"),("1901CS03","Harshita","F","Patna"),
+("1901CS04","Himanshu","M","Mumbai"),("1901CS05","Prakhar","M","Pune"),("1901CS06","Riya","F","Kolkata"),("1901CS07","Shubham","M","Patna"),
+("1901CS08","Siddharth","M","Kolkata"),("1901CS09","Vijaya","F","Delhi"),("1901CS10","Vineeta","F","Mumbai");
+
+//select * from Student;
++----------+-----------+--------+---------+
+| RollNo   | SName     | Gender | City    |
++----------+-----------+--------+---------+
+| 1901CS01 | Aman      | M      | Delhi   |
+| 1901CS02 | Amit      | M      | Delhi   |
+| 1901CS03 | Harshita  | F      | Patna   |
+| 1901CS04 | Himanshu  | M      | Mumbai  |
+| 1901CS05 | Prakhar   | M      | Pune    |
+| 1901CS06 | Riya      | F      | Kolkata |
+| 1901CS07 | Shubham   | M      | Patna   |
+| 1901CS08 | Siddharth | M      | Kolkata |
+| 1901CS09 | Vijaya    | F      | Delhi   |
+| 1901CS10 | Vineeta   | F      | Mumbai  |
++----------+-----------+--------+---------+
+
+insert into Course values("CS204","Algorithms",8),("CS225","DataSc",6),("CS244","Maths",7),
+("CS354","Database",8),("CS305","OOPS",4),("CS306","DataStr",7),("CS307","Networks",5),
+("CS308","ML",6),("CS309","OS",3),("CS310","Python",5);
+
+//select * from Course;
++-------+------------+--------+
+| CCode | CName      | Credit |
++-------+------------+--------+
+| CS204 | Algorithms |      8 |
+| CS225 | DataSc     |      6 |
+| CS244 | Maths      |      7 |
+| CS354 | Database   |      8 |
+| CS305 | OOPS       |      4 |
+| CS306 | DataStr    |      7 |
+| CS307 | Networks   |      5 |
+| CS308 | ML         |      6 |
+| CS309 | OS         |      3 |
+| CS310 | Python     |      5 |
++-------+------------+--------+
+
+
+
+
+
+
+# QUESTION 2:
+
+//inserting 5 values
+insert into Enrolled values("1901CS01","CS204");
+insert into Enrolled values("1901CS03","CS305");
+insert into Enrolled values("1901CS05","CS204");
+insert into Enrolled values("1901CS09","CS225");
+insert into Enrolled values("1901CS09","CS225");
+
+//No errors => duplicate entries allowed 
+
+//select * from Enrolled;
++----------+-------+
+| RollNo   | CCode |
++----------+-------+
+| 1901CS01 | CS204 |
+| 1901CS03 | CS305 |
+| 1901CS05 | CS204 |
+| 1901CS09 | CS225 |
+| 1901CS09 | CS225 |
++----------+-------+
+
+
+
+
+
+
+# QUESTION 3:
+
+//Find the list of students who are from Patna and Mumbai cities
+select * from Student where City="Patna" or City="Mumbai";
+
++----------+----------+--------+--------+
+| RollNo   | SName    | Gender | City   |
++----------+----------+--------+--------+
+| 1901CS03 | Harshita | F      | Patna  |
+| 1901CS04 | Himanshu | M      | Mumbai |
+| 1901CS07 | Shubham  | M      | Patna  |
+| 1901CS10 | Vineeta  | F      | Mumbai |
++----------+----------+--------+--------+
+
+
+
+
+
+
+# QUESTION 4:
+
+//Find all the distinct names of Male students
+select distinct SName from Student where Gender="M";
+
++-----------+
+| SName     |
++-----------+
+| Aman      |
+| Amit      |
+| Himanshu  |
+| Prakhar   |
+| Shubham   |
+| Siddharth |
++-----------+
+
+
+
+
+
+
+QUESTION 5:
+
+// Find the name of the courses which have credit less than 6
+select CName as Courses_with_lessCredit from Course where Credit < 6;
+
++-------------------------+
+| Courses_with_lessCredit |
++-------------------------+
+| OOPS                    |
+| Networks                |
+| OS                      |
+| Python                  |
++-------------------------+
+
+
+
+
+
+
+# QUESTION 6:
+
+//Update the CName of CS354 course from “Database” to “Database Systems”
+update Course set CName="Database Systems" where CCode="CS354";
+
+//select * from Course;
++-------+------------------+--------+
+| CCode | CName            | Credit |
++-------+------------------+--------+
+| CS204 | Algorithms       |      8 |
+| CS225 | DataSc           |      6 |
+| CS244 | Maths            |      7 |
+| CS354 | Database Systems |      8 |
+| CS305 | OOPS             |      4 |
+| CS306 | DataStr          |      7 |
+| CS307 | Networks         |      5 |
+| CS308 | ML               |      6 |
+| CS309 | OS               |      3 |
+| CS310 | Python           |      5 |
++-------+------------------+--------+
+
+
+
+
+
+
+# QUESTION 7:
+
+//Now make RollNo and CCode as the primary keys of Student and Course tables respectively
+alter table Student add primary key (RollNo);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+alter table Course add primary key (CCode);
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+
+
+
+
+# QUESTION 8:
+
+// trying to set primary key for enrolled
+alter table Enrolled add primary key(RollNo, CCode);
+ERROR 1062 (23000): Duplicate entry '1901CS09-CS225' for key 'enrolled.PRIMARY'
+
+// NO, it was unsuccessful due to duplicate entries
+// deleting duplicate entries
+delete from Enrolled where RollNo="1901CS09";
+Query OK, 2 rows affected (0.01 sec)
+
+//Again set primary key
+alter table Enrolled add primary key(RollNo, CCode);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+//primary key was set successfully
+
+
+
+
+
+
+# Question 9:
+
+// adding foreign keys to enrolled
+alter table Enrolled add constraint enrolled_fk1 foreign key(CCode) references Course(CCode);
+Query OK, 3 rows affected (0.06 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+alter table Enrolled add constraint enrolled_fk2 foreign key(RollNo) references student(RollNo);
+Query OK, 3 rows affected (0.05 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+// adding entries
+insert into enrolled values ('1901CS01','CS310'), ('1901CS01','CS305'), ('1901CS02','CS204')
+, ('1901CS02','CS225'), ('1901CS04','CS307'), ('1901CS04','CS354'), ('1901CS04','CS225'),
+ ('1901CS06','CS310'), ('1901CS06','CS308'), ('1901CS06','CS309'), ('1901CS08','CS204'),
+ ('1901CS08','CS309'), ('1901CS09','CS225'), ('1901CS10','CS307'), ('1901CS10','CS310');
+Query OK, 15 rows affected (0.02 sec)
+Records: 15  Duplicates: 0  Warnings: 0
+
+
+insert into enrolled values('1901CS11','CS305');
+ERROR 1452 (23000): Cannot add or update a child row: 
+a foreign key constraint fails (`dblab`.`enrolled`, CONSTRAINT `enrolled_fk2` FOREIGN KEY (`RollNo`) REFERENCES `student` (`RollNo`))
+
+// In this case we are not able to enter the entry because its rollno is '1901CS11' which does not exists in the table Student
+// It will accept some entry in rollno only if it exists in student(rollno) as well.
+
+
+
+
+
+
+# QUESTION 10:
+
+//find the course codes which were enrolled by student with RollNo "1901CS09"
+select * from Enrolled where rollno = '1901CS09';
+
++----------+-------+
+| RollNo   | CCode |
++----------+-------+
+| 1901CS09 | CS225 |
++----------+-------+
+
+
+
+
+
+
+# QUESTION 11:
+
+//inserting few entries according to question
+insert into enrolled values ('1901CS03','CS204'),('1901CS06','CS204'),('1901CS09','CS204');
+
+//Find all the unique name of female students who are enrolled to CS204 course
+select distinct SName from Student,Enrolled where
+    -> Gender='F' and Student.RollNo =Enrolled.RollNo and
+    -> Enrolled.CCode="CS204";
+
++----------+
+| SName    |
++----------+
+| Harshita |
+| Riya     |
+| Vijaya   |
++----------+
+
+
+
+
+
+
+# QUESTION 12:
+
+//// adding year of enrollment (yoe) column
+alter table enrolled add yoe int;
+
+update enrolled set yoe = 2021;
+
+update enrolled set yoe = 2020 where ccode = 'CS204' or ccode = 'CS225' or ccode = 'CS244';
+
+//select * from enrolled;
++----------+-------+------+
+| RollNo   | CCode | yoe  |
++----------+-------+------+
+| 1901CS01 | CS204 | 2020 |
+| 1901CS01 | CS305 | 2021 |
+| 1901CS01 | CS310 | 2021 |
+| 1901CS02 | CS204 | 2020 |
+| 1901CS02 | CS225 | 2020 |
+| 1901CS03 | CS204 | 2020 |
+| 1901CS03 | CS305 | 2021 |
+| 1901CS04 | CS225 | 2020 |
+| 1901CS04 | CS307 | 2021 |
+| 1901CS04 | CS354 | 2021 |
+| 1901CS05 | CS204 | 2020 |
+| 1901CS06 | CS204 | 2020 |
+| 1901CS06 | CS308 | 2021 |
+| 1901CS06 | CS309 | 2021 |
+| 1901CS06 | CS310 | 2021 |
+| 1901CS08 | CS204 | 2020 |
+| 1901CS08 | CS309 | 2021 |
+| 1901CS09 | CS204 | 2020 |
+| 1901CS09 | CS225 | 2020 |
+| 1901CS10 | CS307 | 2021 |
+| 1901CS10 | CS310 | 2021 |
++----------+-------+------+
+
+
+
+
+
+
+# QUESTION 13:
+
+//Check whether a student can take the same course in two different years
+mysql> insert into enrolled values ('1901CS01','CS204',2021);
+ERROR 1062 (23000): Duplicate entry '1901CS01-CS204' for key 'enrolled.PRIMARY'
+
+// NO, we cant assign same rollno with same course in different year because
+// we set <rollno-ccode> as primary key previously and hence there can not be any duplication
+// of <rollno-ccode> pair value. If we need to do it, we first have to remove primary key.
+
+mysql> alter table Enrolled drop primary key;
+ERROR 1553 (HY000): Cannot drop index 'PRIMARY': needed in a foreign key constraint
+
+//To drop Primary key, foreign key need to be dropped first
+
+mysql> alter table Enrolled drop foreign key enrolled_fk1;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table Enrolled drop foreign key enrolled_fk2;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+//Now dropping primary key
+mysql> alter table Enrolled drop primary key;
+Query OK, 21 rows affected (0.06 sec)
+Records: 21  Duplicates: 0  Warnings: 0
+
+mysql> insert into enrolled values ('1901CS01','CS204',2021);
+Query OK, 1 row affected (0.01 sec)
+
+//Now successfully inserted
+
+
+
+
+   
+
+
+
+
+
+
+
+
+

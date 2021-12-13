@@ -1,0 +1,453 @@
+//cd "C:\Program Files\MySQL\MySQL Server 8.0\bin\"
+
+CREATE DATABASE dbMidTerm;
+
+SHOW DATABASES;
+
+USE DATABASE dblab;
+
+CREATE USER 'midsem'@'localhost' IDENTIFIED BY 'exam';
+
+GRANT ALL PRIVILEGES ON dbMidTerm.* TO 'midsem'@'localhost';
+
+create table student(
+roll_no char(10) ,
+name varchar(20) not null,
+mobile_no int(10) unique,
+primary key (roll_no));
+
+DESC student;
+
+insert into account values(9732, 'Park Road', 1200),
+(1332, 'Buchtel Blvd', 1560 ),
+(1991, 'Exhibition Rd', 2560 );
+
+update student
+set mobile_no=9876543210
+where roll_no = '2009CS01'
+
+delete from student
+where roll_no ='2009CS01'
+
+drop table table_name;
+drop database database_name;
+
+CREATE TABLE Customers(
+	Cust_ID smallint,
+	Gender char(1) NOT NULL CHECK (Gender IN ('M', 'F')),
+	DoB date,
+	CONSTRAINT Customers_pk PRIMARY KEY(Cust_ID));
+	
+CREATE TABLE Purchase(
+	Cust_ID smallint,
+	Car_ID char(5),
+	DoP date,
+	CONSTRAINT Purchase_pk PRIMARY KEY(Cust_ID, Car_ID),
+	CONSTRAINT Purchase_fk1 FOREIGN KEY(Cust_ID) REFERENCES Customers(Cust_ID),
+	CONSTRAINT Purchase_fk2 FOREIGN KEY(Car_ID) REFERENCES Cars(Car_ID));
+
+
+
+alter table student
+add dob date after stud_name;
+
+alter table student
+drop dob;
+
+alter table student
+modify name varchar(30);
+
+alter table account
+alter balance set default 100;
+
+alter table account
+rename to acounts;
+
+alter table ac_type
+add primary key (account_no);
+
+alter table ac_type
+add constraint ac_type_fk1 foreign key
+(account_no) references account (account_no);
+
+alter table ac_type
+drop primary key;
+
+alter table ac_type
+drop foreign key ac_type_fk1;
+
+
+
+SELECT DISTINCT branch_name
+FROM account;
+
+SELECT customer_name, borrower.loan_number, amount
+FROM borrower, loan
+WHERE borrower.loan_number = loan.loan_number
+AND branch_name = 'Patliputra';
+
+SELECT customer_name, borrower.loan_number AS loan_id,
+amount
+FROM borrower, loan
+WHERE borrower.loan_number = loan.loan_number
+
+
+//'%': allows to match any string of length (including zero)
+// '_' :allows to match a single character
+
+SELECT * FROM customer
+WHERE name LIKE '_avi%'// or not LIKE
+
+//names which contain w
+SELECT cust_name
+FROM customer
+WHERE cust_name REGEXP binary 'w'; // remove binary to match case insensitive
+
+SELECT *
+FROM customers
+WHERE city IN ('Dhanbad', 'New Delhi'); // or not IN
+
+SELECT * FROM account
+WHERE account_no BETWEEN 1234 and 5555; // or not BETWEEN
+
+SELECT account_number, balance
+FROM account
+WHERE branch_name=‘PU’
+ORDER BY balance, account_number;
+
+SELECT SUM(amount) as total // avg min max count
+FROM account 
+
+//customer names who have more than one account
+SELECT customer_name, COUNT(account_no)
+FROM depositor
+GROUP BY customer_name
+HAVING COUNT(account_no)>1;
+
+SELECT depositor.customer_name
+FROM depositor
+INNER JOIN borrower
+ON depositor.customer_name=borrower.customer_name;
+
+//left join:The result is NULL from the right side, if there is no match
+SELECT depositor.customer_name,
+borrower.customer_name
+FROM depositor
+LEFT JOIN borrower
+ON depositor.customer_name=borrower.customer_name;
+
+SELECT customer_name FROM depositor UNION
+SELECT customer_name FROM borrower;
+
+//Mysql does not support INTERSECT and MINUS operation: use nested query
+
+//set intersection equivalent
+
+SELECT customer_name FROM depositor
+WHERE customer_name IN (
+SELECT customer_name FROM borrower);
+
+//equivalent to minus operation:
+
+SELECT cust_name FROM depsositor
+WHERE cust_name NOT IN (
+SELECT cust_name FROM borrower);
+
+INSERT INTO cust_bkp
+SELECT * FROM customers
+WHERE customer_name IN (
+SELECT customer_name FROM depositor) ;
+
+UPDATE customers SET salary = salary * 0.25 //DELETE from customers
+WHERE age IN (
+SELECT age FROM cust_bkp
+WHERE age >= 27 );
+
+//Find the customers with maximum number ofaccounts
+
+SELECT cust_name FROM depositor
+GROUP BY cust_name
+HAVING COUNT(account_no) = (
+SELECT MAX(cnt)
+FROM (SELECT COUNT(account_no) AS cnt
+FROM depositor
+GROUP BY cust_name) AS temp1);
+
+//Views
+
+CREATE VIEW cust_view AS
+SELECT customer_name AS cust_name,
+customer_city AS cust_city FROM customer;
+select * from cust_view;
+
+
+
+//Some string functions
+
+mysql> SELECT ASCII(‘a’);
+mysql> SELECT CHAR_LENGTH(‘university’);
+mysql> SELECT CONCAT(‘delhi ‘ ,‘university’);
+mysql> SELECT CONCAT_WS(‘-’, ‘delhi ‘,’university’);
+mysql> SELECT FIELD (‘a’,’k’,’d’,’s’,’a’);
+mysql> SELECT FORMAT(123456789.789,2)
+mysql> SELECT INSERT(“univ.edu.in", 6, 3 “gov");
+mysql> SELECT INSERT(“univ.edu.in", 6, 3 “gov");
+mysql>SELECT LCASE(‘UNIVERSITY’)
+mysql>SELECT UCASE(‘University’)
+mysql>SELECT LOCATE("com", “www.yahoo.com", 4) AS MatchPosition;
+mysql>SELECT LPAD(CustomerName, 30, “*") AS LeftPad CustomerName FROM Customers;
+mysql> SELECT LTRIM(‘ delhi’);
+mysql> SELECT REPEAT(‘abc’,3);
+mysql> SELECT REPLACE("SQLTutorial", "SQL", "HTML");
+mysql> SELECT REVERSE(‘delhi’);
+mysql> SELECT STRCMP(‘abc’,’abb’);
+mysql>SELECT SUBSTR(CustomerName, 2, 5) AS ExtractString FROM Customers;
+mysql> SELECT RIGHT(‘IIT Patna’,5)
+
+
+
+//Some date functions
+
+mysql> SELECT curdate();
+mysql> SELECT sysdate();
+mysql> SELECT EXTRACT(year from ‘2018-09-24 20:34:45’) //or month/day/hour/minute/seconds
+mysql>SELECT ADDDATE('2018-05-15', INTERVAL 10 DAY) as required_date;
+mysql>SELECT ADDTIME('2018-05-15 13:20:32.50','21:39:27.50') as required_datetime;
+mysql> SELECT DATE_FORMAT ( '1998-10-18', '%D %b %Y' )
+mysql> SELECT DATE_SUB('2019-08-29',INTERVAL 10 DAY);
+mysql> SELECT DATEDIFF('2019-08-29 11:31:31','2019-08-15');
+mysql> SELECT DAYNAME('2019-09-15');
+mysql>SELECT DAYOFWEEK('2018-09-15'); // 1 for sunday 2 for monday...
+mysql> SELECT LAST_DAY('2019-08-18');
+mysql> SELECT DAYOFYEAR('2019-08-15');
+mysql> SELECT TO_DAYS('2019-08-15');
+
+
+
+//Working with files
+
+mysql --local-infile=1 -u root -p
+use dblab;
+
+//load data from file
+mysql> load data local infile 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/std_data.txt' into table teststudt fields terminated by ',' lines terminated by '\n';
+
+//store query result in file
+select * from std_age into outfile 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/output2.txt' fields terminated by ',' lines terminated by '\n';
+
+//To execute query from another file query1.sql
+mysql> source query1.sql
+
+// dump database fp as CS355_mtbackup.sql
+mysqldump -u root -p fp>D:\garbage\CS355_mtbackup.sql
+
+//dump specific tables t1 t2 t3
+$mysqldump –u username –p db1 t1 t2 t3> path\dump.sql
+
+//Reload data from dump files
+$ mysql –u username –p db1 < dump.sql
+//From within mysql,
+mysql>use db1
+mysql> source dump.sql
+
+
+//Some maths Functions
+
+select abs(-1.72)/ceil(x)/floor(x)/sqrt(25)
+select conv(1111,2,10) //15
+select mod(10,3)	//1
+select pow(5,3)		//125
+select round(17.78,1) // 17.8
+select round(17.78,1)	//float b/w 0 and 1
+
+
+//Procedures and functions
+
+//Procedure
+
+delimiter $$
+
+mysql> create procedure isrich(in _name varchar(20), out op varchar(20))
+    -> begin
+    -> declare bal int;
+    -> select balance into bal from account where name=_name;
+    -> if(bal>50000) then
+    -> set op="rich";
+    -> else
+    -> set op="not rich";
+    -> end if;
+    -> end$$
+
+mysql> call isrich("Rohit",@op);
+    -> $$
+
+mysql> select @op;
+    -> $$
++------+
+| @op  |
++------+
+| rich |
++------+
+
+mysql> show procedure status like '%rich';
+SHOW CREATE PROCEDURE procedure_name;
+
+mysql> create procedure procStdStatus(in rollno_p char(8))
+    -> begin
+    -> declare age int;
+    -> declare status_p varchar(20);
+    -> set age = timestampdiff(year, (select DoB from Student where RollNo = rollno_p), curdate());
+    -> if age > 21 then
+    -> set status_p= 'senior';
+    -> else
+    -> set status_p='junior';
+    -> end if;
+    -> update Student set Status = status_p where RollNo = rollno_p;
+    -> end$$
+
+//function to update status of all students
+
+mysql> create procedure procUpdateStatus()
+    -> begin
+    -> declare no_of_students int default 0;
+    -> declare idx int default 0;
+    -> declare rollno_p char(8);
+    -> select count(*) into no_of_students from Student;
+    -> set idx=0;
+    -> while idx< no_of_students do
+    -> select RollNo into rollno_p from Student limit idx, 1;
+    -> call procStdStatus(rollno_p);
+    -> set idx=idx+1;
+    -> end while;
+    -> end$$
+
+
+//Calling procedure to update status of all students
+
+mysql> call procUpdateStatus;
+    -> $$
+
+
+//Functions : always return a single value
+
+CREATE FUNCTION CustomerLevel( credit DECIMAL(10,2))
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+ DECLARE customerLevel VARCHAR(20);
+ IF credit > 50000 THEN
+ SET customerLevel = 'PLATINUM';
+ ELSEIF (credit >= 50000 AND
+ credit <= 10000) THEN
+ SET customerLevel = 'GOLD';
+ ELSEIF credit < 10000 THEN
+ SET customerLevel = 'SILVER';
+ END IF;
+ -- return the customer level
+ RETURN (customerLevel);
+END$$
+
+select CustomerLevel(25000);
+
+mysql> create function maxbal()
+    -> returns int
+    -> deterministic
+    -> begin
+    -> declare maxm int;
+    -> select max(balance) into maxm from account;
+    -> return maxm;
+    -> end$$
+
+mysql> select maxbal();
++----------+
+| maxbal() |
++----------+
+|    90000 |
++----------+
+
+mysql> select maxbal() into @op;
+mysql> select @op;
++-------+
+| @op   |
++-------+
+| 90000 |
++-------+
+
+//Replace
+REPLACE INTO cities
+SET id = 4,
+name = 'Phoenix',
+population = 1768980;
+
+
+//Trigger
+
+DELIMITER $$
+CREATE TRIGGER before_workcenters_insert
+BEFORE INSERT
+ON WorkCenters FOR EACH ROW
+BEGIN
+ DECLARE rowcount INT;
+
+ SELECT COUNT(*)
+ INTO rowcount
+ FROM WorkCenterStats;
+
+ IF rowcount > 0 THEN
+ UPDATE WorkCenterStats
+ SET totalCapacity = totalCapacity + new.capacity;
+ ELSE
+ INSERT INTO WorkCenterStats(totalCapacity)
+ VALUES(new.capacity);
+ END IF;
+END $$
+
+
+
+CREATE TRIGGER before_sales_update
+BEFORE UPDATE
+ON sales FOR EACH ROW
+BEGIN
+ DECLARE errorMessage VARCHAR(255);
+ SET errorMessage = CONCAT('The new quantity ',
+ NEW.quantity,
+ ' cannot be 3 times greater than the current quantity ',
+ OLD.quantity);
+
+ IF new.quantity > old.quantity * 3 THEN
+ SIGNAL SQLSTATE '45000'
+ SET MESSAGE_TEXT = errorMessage;
+ END IF;
+END $$
+DELIMITER ;
+
+mysql>SHOW TRIGGERS;
+
+
+//Index
+
+CREATE TABLE products(
+prod_ID int unsigned auto_increment,
+prod_name varchar(20) not null,
+Primary key (prod_ID),
+Index idx_pname (prod_name)
+);
+
+ALTER TABLE products
+ADD INDEX idx_pcat (prod_name,prod_ID);
+
+DROP INDEX idx_pcat ON products;
+
+SHOW INDEX FROM products ;
+SHOW INDEX FROM products \G;
+
+//to check query execution time
+
+SET profiling = 1;
+SELECT * FROM products;
+SHOW PROFILES;
+
+
+
+
+

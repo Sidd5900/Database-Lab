@@ -1,0 +1,252 @@
+//1901CS75
+//Siddharth Sanskritayan
+
+//All the three tables displayed
+mysql> select * from Student;
++----------+-----------+--------+-----------+
+| RollNo   | SName     | Gender | City      |
++----------+-----------+--------+-----------+
+| 1901CS01 | Aman      | M      | Delhi     |
+| 1901CS02 | Amit      | M      | Delhi     |
+| 1901CS03 | Harshita  | F      | Patna     |
+| 1901CS04 | Himanshu  | M      | Mumbai    |
+| 1901CS05 | Prakhar   | M      | Pune      |
+| 1901CS06 | Riya      | F      | Kolkata   |
+| 1901CS07 | Shubham   | M      | Patna     |
+| 1901CS08 | Siddharth | M      | Kolkata   |
+| 1901CS09 | Vijaya    | F      | Delhi     |
+| 1901CS10 | Vineeta   | F      | Mumbai    |
+| 1901CS99 | Ritwik    | M      | Bangalore |
+| 1901EE02 | Gaurav    | M      | Patna     |
+| 1901ME01 | Pushkar   | M      | Kanpur    |
+| 1901ME02 | Sakshi    | F      | Kanpur    |
++----------+-----------+--------+-----------+
+14 rows in set (0.00 sec)
+
+mysql> select * from Course;
++-------+------------------+--------+
+| CCode | CName            | Credit |
++-------+------------------+--------+
+| CS204 | Algorithms       |      8 |
+| CS225 | DataSc           |      6 |
+| CS244 | Maths            |      7 |
+| CS305 | OOPS             |      4 |
+| CS306 | DataStr          |      7 |
+| CS307 | Networks         |      5 |
+| CS308 | ML               |      6 |
+| CS309 | OS               |      3 |
+| CS310 | Python           |      5 |
+| CS354 | Database Systems |      8 |
+| ME102 | Mechanics        |      3 |
+| ME501 | Thermodynamics   |      4 |
+| ME502 | Fluids           |      5 |
++-------+------------------+--------+
+13 rows in set (0.00 sec)
+
+mysql> select * from Enrolled;
++----------+-------+------+
+| RollNo   | CCode | yoe  |
++----------+-------+------+
+| 1901CS01 | CS204 | 2020 |
+| 1901CS01 | CS305 | 2021 |
+| 1901CS01 | CS310 | 2021 |
+| 1901CS02 | CS204 | 2020 |
+| 1901CS02 | CS225 | 2020 |
+| 1901CS03 | CS204 | 2020 |
+| 1901CS03 | CS305 | 2021 |
+| 1901CS04 | CS204 | 2019 |
+| 1901CS04 | CS225 | 2020 |
+| 1901CS04 | CS307 | 2021 |
+| 1901CS04 | CS310 | 2020 |
+| 1901CS04 | CS354 | 2021 |
+| 1901CS05 | CS204 | 2020 |
+| 1901CS06 | CS204 | 2020 |
+| 1901CS06 | CS225 | 2019 |
+| 1901CS06 | CS307 | 2018 |
+| 1901CS06 | CS308 | 2021 |
+| 1901CS06 | CS309 | 2021 |
+| 1901CS06 | CS310 | 2021 |
+| 1901CS08 | CS204 | 2020 |
+| 1901CS08 | CS309 | 2021 |
+| 1901CS09 | CS204 | 2020 |
+| 1901CS09 | CS225 | 2020 |
+| 1901CS10 | CS307 | 2021 |
+| 1901CS10 | CS310 | 2021 |
+| 1901CS99 | CS306 | 2019 |
+| 1901ME01 | ME501 | 2021 |
+| 1901ME02 | ME102 | 2017 |
++----------+-------+------+
+28 rows in set (0.00 sec)
+
+
+
+
+
+Question #1 
+//Find the name of all the courses which start with 'CS' code
+
+
+select CName from Course where CCode regexp '^CS';
++------------------+
+| CName            |
++------------------+
+| Algorithms       |
+| DataSc           |
+| Maths            |
+| OOPS             |
+| DataStr          |
+| Networks         |
+| ML               |
+| OS               |
+| Python           |
+| Database Systems |
++------------------+
+
+
+
+
+Question #2:
+// Find the name of the male students who have atleast two 'a's in their names
+
+select SName from Student where SName like '%a%a%' and Gender = 'M';
++---------+
+| SName   |
++---------+
+| Aman    |
+| Prakhar |
+| Gaurav  |
++---------+
+
+
+
+
+Question #3:
+Find the students who have not enrolled in between 2018 and 2019
+
+select * from Student where RollNo not in (select RollNo from Enrolled where YoE between 2018 and 2019);
++----------+-----------+--------+---------+
+| RollNo   | SName     | Gender | City    |
++----------+-----------+--------+---------+
+| 1901CS01 | Aman      | M      | Delhi   |
+| 1901CS02 | Amit      | M      | Delhi   |
+| 1901CS03 | Harshita  | F      | Patna   |
+| 1901CS05 | Prakhar   | M      | Pune    |
+| 1901CS07 | Shubham   | M      | Patna   |
+| 1901CS08 | Siddharth | M      | Kolkata |
+| 1901CS09 | Vijaya    | F      | Delhi   |
+| 1901CS10 | Vineeta   | F      | Mumbai  |
+| 1901EE02 | Gaurav    | M      | Patna   |
+| 1901ME01 | Pushkar   | M      | Kanpur  |
+| 1901ME02 | Sakshi    | F      | Kanpur  |
++----------+-----------+--------+---------+
+
+
+
+
+
+Question #4:
+//Find the course with least credit
+
+select *from Course where Credit = (select min(Credit) from Course);
++-------+-----------+--------+
+| CCode | CName     | Credit |
++-------+-----------+--------+
+| CS309 | OS        |      3 |
+| ME102 | Mechanics |      3 |
++-------+-----------+--------+
+
+
+
+
+Question #5:
+//Find the name of the Course which is not enrolled by any students in the year 2020
+
+select CName from Course where CCode not in (select distinct CCode from Enrolled where YoE = 2020);
++------------------+
+| CName            |
++------------------+
+| Maths            |
+| OOPS             |
+| DataStr          |
+| Networks         |
+| ML               |
+| OS               |
+| Database Systems |
+| Mechanics        |
+| Thermodynamics   |
+| Fluids           |
++------------------+
+
+
+
+
+Question #6:
+//Find the total number of students city wise
+
+select City, count(*) from Student group by City;
++-----------+----------+
+| City      | count(*) |
++-----------+----------+
+| Delhi     |        3 |
+| Patna     |        3 |
+| Mumbai    |        2 |
+| Pune      |        1 |
+| Kolkata   |        2 |
+| Bangalore |        1 |
+| Kanpur    |        2 |
++-----------+----------+
+
+
+
+
+Question #7:
+//Find the rollno of the students who have enrolled to 5 number of courses
+
+Select RollNo from Enrolled group by RollNo having count(*) = 5;
++----------+
+| RollNo   |
++----------+
+| 1901CS04 |
++----------+
+
+
+
+
+Question #8:
+// Find the total number of courses enrolled by student with roll no '1901CS99'
+
+Select count(distinct CCode) from Enrolled where RollNo = '1901CS99';
++-----------------------+
+| count(distinct CCode) |
++-----------------------+
+|                     1 |
++-----------------------+
+
+
+
+
+Question #9:
+//Find all the 5 level courses (the digits parts of the course code should start with 5)
+
+select * from Course where CCode like '__5__';
++-------+----------------+--------+
+| CCode | CName          | Credit |
++-------+----------------+--------+
+| ME501 | Thermodynamics |      4 |
+| ME502 | Fluids         |      5 |
++-------+----------------+--------+
+
+
+
+
+Question #10:
+// Count the number of students containing 'CS' as part of the RollNo
+
+select count(*) from Student where RollNo like '%CS%';
++----------+
+| count(*) |
++----------+
+|       11 |
++----------+
+
+

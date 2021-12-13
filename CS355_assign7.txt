@@ -1,0 +1,344 @@
+//1901CS75
+//Siddharth Sanskritayan
+//Assignment 7
+
+//to allow all the users on your MySQL server that has the CREATE ROUTINE privilege to have the possibility to create functions
+
+mysql> SET GLOBAL log_bin_trust_function_creators = 1;
+Query OK, 0 rows affected (0.01 sec)
+
+// Initial tables
+
+mysql> select * from Student;
++----------+-----------+--------+-----------+---------------------+------------+
+| RollNo   | SName     | Gender | City      | Email               | DoB        |
++----------+-----------+--------+-----------+---------------------+------------+
+| 1901CS01 | Aman      | M      | Delhi     | aman@gmail.com      | 2001-05-30 |
+| 1901CS02 | Amit      | M      | Delhi     | amit@gmail.com      | 2001-12-06 |
+| 1901CS03 | Harshita  | F      | Patna     | harshita@yahoo.com  | 2000-11-15 |
+| 1901CS04 | Himanshu  | M      | Mumbai    | himanshu@yahoo.com  | 2000-02-28 |
+| 1901CS05 | Prakhar   | M      | Pune      | prakhar@outlook.com | 2001-05-30 |
+| 1901CS06 | Riya      | F      | Kolkata   | riya@gmail.com      | 2000-02-28 |
+| 1901CS07 | Shubham   | M      | Patna     | shubh@yahoo.com     | 2000-11-15 |
+| 1901CS08 | Siddharth | M      | Kolkata   | sid@gmail.com       | 2000-11-15 |
+| 1901CS09 | Vijaya    | F      | Delhi     | vijaya@gmail.com    | 2001-05-30 |
+| 1901CS10 | Vineeta   | F      | Mumbai    | vineeta@outlook.com | 2000-02-28 |
+| 1901CS11 | Kavya     | F      | Delhi     | kavya@yahoo.com     | 1999-07-16 |
+| 1901CS12 | Bob       | M      | Kolkata   | bob@yahoo.com       | 2001-12-06 |
+| 1901CS13 | Naman     | M      | Pune      | naman@gmail.com     | 2001-05-30 |
+| 1901CS14 | Rohan     | M      | Mumbai    | rohan@gmail.com     | 2001-05-09 |
+| 1901CS15 | Mohan     | M      | Pune      | mohan@gmail.com     | 2000-05-09 |
+| 1901CS16 | Sohan     | M      | Ranchi    | sohan@gmail.com     | 2001-11-09 |
+| 1901CS17 | Simran    | F      | Patna     | simran@gmail.com    | 2001-05-19 |
+| 1901CS18 | Shivani   | F      | Mumbai    | shivani@gmail.com   | 1999-04-09 |
+| 1901CS19 | Aryan     | M      | Bangalore | aryan@gmail.com     | 2001-08-09 |
+| 1901CS20 | Vinod     | M      | Mumbai    | vinod@gmail.com     | 2000-07-09 |
+| 1901CS21 | Ravi      | M      | Hyderabad | ravi@gmail.com      | 1999-05-09 |
+| 1901CS22 | Ankita    | F      | Delhi     | ankita@gmail.com    | 2001-12-08 |
+| 1901CS23 | Shiv      | M      | Lucknow   | shiv@gmail.com      | 2001-11-07 |
+| 1901CS99 | Ritwik    | M      | Bangalore | ritwik@outlook.com  | 1999-07-16 |
+| 1901EE02 | Gaurav    | M      | Patna     | gaurav@gmail.com    | 2001-12-06 |
+| 1901ME01 | Pushkar   | M      | Kanpur    | pushkar@yahoo.com   | 2000-11-15 |
+| 1901ME02 | Sakshi    | F      | Kanpur    | sakshi@yahoo.com    | 2000-02-28 |
++----------+-----------+--------+-----------+---------------------+------------+
+27 rows in set (0.03 sec)
+
+
+mysql> Select * from Course;
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       |      8 | Core          |
+| CS225 | DataSc           |      6 | Open Elective |
+| CS244 | Maths            |      7 | Open Elective |
+| CS305 | OOPS             |      4 | Core          |
+| CS306 | DataStr          |      7 | Core          |
+| CS307 | Networks         |      5 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS309 | OS               |      3 | Core          |
+| CS310 | Python           |      5 | Elective      |
+| CS311 | Algo Lab         |      6 | Core          |
+| CS312 | Datastr Lab      |      5 | Core          |
+| CS313 | Networks Lab     |      6 | Core          |
+| CS314 | ML Lab           |      6 | Core          |
+| CS315 | OS Lab           |      7 | Core          |
+| CS316 | Python Lab       |      6 | Core          |
+| CS317 | Compiler Lab     |      4 | Core          |
+| CS318 | Automata Lab     |      6 | Core          |
+| CS319 | DB Lab           |      3 | Core          |
+| CS320 | OOPS Lab         |      6 | Core          |
+| CS354 | Database Systems |      8 | Core          |
+| CS355 | Compiler         |      6 | Core          |
+| CS555 | Automata Theory  |      6 | Elective      |
+| CS561 | Architecture     |      5 | Elective      |
+| CS599 | Architecture Lab |      3 | Elective      |
+| ME102 | Mechanics        |      3 | Core          |
+| ME501 | Thermodynamics   |      4 | Elective      |
+| ME502 | Fluids           |      5 | Open Elective |
+| ME503 | Rotation         |      4 | Elective      |
++-------+------------------+--------+---------------+
+28 rows in set (0.03 sec)
+
+
+mysql> select * from Enrolled;
++----------+-------+------------+-------+
+| RollNo   | CCode | DoE        | grade |
++----------+-------+------------+-------+
+| 1901CS01 | CS204 | 2020-02-25 | F     |
+| 1901CS01 | CS305 | 2020-02-25 | D     |
+| 1901CS01 | CS310 | 2020-02-25 | A     |
+| 1901CS01 | CS354 | 2020-02-25 | F     |
+| 1901CS01 | CS355 | 2020-12-31 | A     |
+| 1901CS01 | CS561 | 2020-02-25 | A     |
+| 1901CS02 | CS204 | 2021-07-15 | E     |
+| 1901CS02 | CS225 | 2021-07-15 | B     |
+| 1901CS02 | CS310 | 2021-07-15 | E     |
+| 1901CS02 | CS354 | 2019-07-18 | D     |
+| 1901CS02 | CS355 | 2021-09-11 | A     |
+| 1901CS02 | CS555 | 2021-07-15 | D     |
+| 1901CS02 | CS561 | 2021-07-15 | D     |
+| 1901CS02 | CS599 | 2021-07-15 | B     |
+| 1901CS03 | CS204 | 2021-01-02 | B     |
+| 1901CS03 | CS305 | 2021-01-02 | B     |
+| 1901CS04 | CS204 | 2021-07-15 | A     |
+| 1901CS04 | CS225 | 2021-07-15 | C     |
+| 1901CS04 | CS307 | 2021-07-15 | C     |
+| 1901CS04 | CS310 | 2021-07-15 | E     |
+| 1901CS04 | CS354 | 2021-07-15 | A     |
+| 1901CS04 | CS561 | 2021-07-15 | F     |
+| 1901CS05 | CS204 | 2021-01-02 | E     |
+| 1901CS05 | CS555 | 2021-01-02 | C     |
+| 1901CS06 | CS204 | 2021-07-15 | D     |
+| 1901CS06 | CS225 | 2021-07-15 | A     |
+| 1901CS06 | CS307 | 2021-07-15 | A     |
+| 1901CS06 | CS308 | 2021-07-15 | E     |
+| 1901CS06 | CS309 | 2021-07-15 | A     |
+| 1901CS06 | CS310 | 2021-07-15 | D     |
+| 1901CS08 | CS204 | 2021-03-20 | C     |
+| 1901CS08 | CS309 | 2021-03-20 | C     |
+| 1901CS08 | CS561 | 2021-03-20 | F     |
+| 1901CS09 | CS204 | 2021-01-02 | A     |
+| 1901CS09 | CS225 | 2021-01-02 | D     |
+| 1901CS09 | CS309 | 2021-01-02 | F     |
+| 1901CS09 | CS599 | 2021-01-02 | C     |
+| 1901CS10 | CS307 | 2020-12-31 | E     |
+| 1901CS10 | CS310 | 2020-12-31 | F     |
+| 1901CS10 | CS355 | 2021-07-15 | A     |
+| 1901CS10 | CS599 | 2020-12-31 | C     |
+| 1901CS99 | CS306 | 2020-12-31 | B     |
+| 1901CS99 | CS355 | 2021-11-21 | A     |
+| 1901CS99 | CS599 | 2020-12-31 | C     |
+| 1901ME01 | ME501 | 2021-03-20 | E     |
+| 1901ME02 | ME102 | 2020-02-25 | C     |
++----------+-------+------------+-------+
+46 rows in set (0.00 sec)
+
+
+//-------------------------------------------------------------------------------------------------
+
+Q1)
+
+//function to update status of a particular student
+
+mysql> create procedure procStdStatus(in rollno_p char(8))
+    -> begin
+    -> declare age int;
+    -> declare status_p varchar(20);
+    -> set age = timestampdiff(year, (select DoB from Student where RollNo = rollno_p), curdate());
+    -> if age > 21 then
+    -> set status_p= 'senior';
+    -> else
+    -> set status_p='junior';
+    -> end if;
+    -> update Student set Status = status_p where RollNo = rollno_p;
+    -> end$$
+Query OK, 0 rows affected (0.01 sec)
+
+
+//function to update status of all students
+
+mysql> create procedure procUpdateStatus()
+    -> begin
+    -> declare no_of_students int default 0;
+    -> declare idx int default 0;
+    -> declare rollno_p char(8);
+    -> select count(*) into no_of_students from Student;
+    -> set idx=0;
+    -> while idx< no_of_students do
+    -> select RollNo into rollno_p from Student limit idx, 1;
+    -> call procStdStatus(rollno_p);
+    -> set idx=idx+1;
+    -> end while;
+    -> end$$
+Query OK, 0 rows affected (0.06 sec)
+
+
+//Calling procedure to update status of all students
+
+mysql> call procUpdateStatus;
+    -> $$
+Query OK, 1 row affected (0.11 sec)
+
+
+//Printing the Student table
+
+mysql> select * from Student;
+    -> $$
++----------+-----------+--------+-----------+---------------------+------------+--------+
+| RollNo   | SName     | Gender | City      | Email               | DoB        | Status |
++----------+-----------+--------+-----------+---------------------+------------+--------+
+| 1901CS01 | Aman      | M      | Delhi     | aman@gmail.com      | 2001-05-30 | junior |
+| 1901CS02 | Amit      | M      | Delhi     | amit@gmail.com      | 2001-12-06 | junior |
+| 1901CS03 | Harshita  | F      | Patna     | harshita@yahoo.com  | 2000-11-15 | junior |
+| 1901CS04 | Himanshu  | M      | Mumbai    | himanshu@yahoo.com  | 2000-02-28 | junior |
+| 1901CS05 | Prakhar   | M      | Pune      | prakhar@outlook.com | 2001-05-30 | junior |
+| 1901CS06 | Riya      | F      | Kolkata   | riya@gmail.com      | 2000-02-28 | junior |
+| 1901CS07 | Shubham   | M      | Patna     | shubh@yahoo.com     | 2000-11-15 | junior |
+| 1901CS08 | Siddharth | M      | Kolkata   | sid@gmail.com       | 2000-11-15 | junior |
+| 1901CS09 | Vijaya    | F      | Delhi     | vijaya@gmail.com    | 2001-05-30 | junior |
+| 1901CS10 | Vineeta   | F      | Mumbai    | vineeta@outlook.com | 2000-02-28 | junior |
+| 1901CS11 | Kavya     | F      | Delhi     | kavya@yahoo.com     | 1999-07-16 | senior |
+| 1901CS12 | Bob       | M      | Kolkata   | bob@yahoo.com       | 2001-12-06 | junior |
+| 1901CS13 | Naman     | M      | Pune      | naman@gmail.com     | 2001-05-30 | junior |
+| 1901CS14 | Rohan     | M      | Mumbai    | rohan@gmail.com     | 2001-05-09 | junior |
+| 1901CS15 | Mohan     | M      | Pune      | mohan@gmail.com     | 2000-05-09 | junior |
+| 1901CS16 | Sohan     | M      | Ranchi    | sohan@gmail.com     | 2001-11-09 | junior |
+| 1901CS17 | Simran    | F      | Patna     | simran@gmail.com    | 2001-05-19 | junior |
+| 1901CS18 | Shivani   | F      | Mumbai    | shivani@gmail.com   | 1999-04-09 | senior |
+| 1901CS19 | Aryan     | M      | Bangalore | aryan@gmail.com     | 2001-08-09 | junior |
+| 1901CS20 | Vinod     | M      | Mumbai    | vinod@gmail.com     | 2000-07-09 | junior |
+| 1901CS21 | Ravi      | M      | Hyderabad | ravi@gmail.com      | 1999-05-09 | senior |
+| 1901CS22 | Ankita    | F      | Delhi     | ankita@gmail.com    | 2001-12-08 | junior |
+| 1901CS23 | Shiv      | M      | Lucknow   | shiv@gmail.com      | 2001-11-07 | junior |
+| 1901CS99 | Ritwik    | M      | Bangalore | ritwik@outlook.com  | 1999-07-16 | senior |
+| 1901EE02 | Gaurav    | M      | Patna     | gaurav@gmail.com    | 2001-12-06 | junior |
+| 1901ME01 | Pushkar   | M      | Kanpur    | pushkar@yahoo.com   | 2000-11-15 | junior |
+| 1901ME02 | Sakshi    | F      | Kanpur    | sakshi@yahoo.com    | 2000-02-28 | junior |
++----------+-----------+--------+-----------+---------------------+------------+--------+
+27 rows in set (0.00 sec)
+
+
+
+//-------------------------------------------------------------------------------------------------
+
+
+Q2)
+
+mysql> create procedure procCourseInsert(in CCode_p char(5), in CName_p varchar(20), in Credit_p smallint, in CType_p varchar(20))
+    -> begin
+    -> If CCode_p not in (select CCode from Course) then
+    -> insert into Course values(CCode_p, CName_p, Credit_p, CType_p);
+    -> end if;
+    -> end$$
+Query OK, 0 rows affected (0.21 sec)
+
+
+//Calling the Procedure:
+
+//CS321 not present
+
+mysql> call procCourseInsert('CS321','Java',4,'Elective');
+    -> $$
+Query OK, 1 row affected (0.03 sec)
+
+//CS355 already present
+
+mysql> call procCourseInsert('CS355','Java',4,'Elective');
+    -> $$
+Query OK, 0 rows affected (0.00 sec)
+
+
+//Printing the Course table
+
+mysql> select * from Course;
+    -> $$
++-------+------------------+--------+---------------+
+| CCode | CName            | Credit | CType         |
++-------+------------------+--------+---------------+
+| CS204 | Algorithms       |      8 | Core          |
+| CS225 | DataSc           |      6 | Open Elective |
+| CS244 | Maths            |      7 | Open Elective |
+| CS305 | OOPS             |      4 | Core          |
+| CS306 | DataStr          |      7 | Core          |
+| CS307 | Networks         |      5 | Core          |
+| CS308 | ML               |      6 | Open Elective |
+| CS309 | OS               |      3 | Core          |
+| CS310 | Python           |      5 | Elective      |
+| CS311 | Algo Lab         |      6 | Core          |
+| CS312 | Datastr Lab      |      5 | Core          |
+| CS313 | Networks Lab     |      6 | Core          |
+| CS314 | ML Lab           |      6 | Core          |
+| CS315 | OS Lab           |      7 | Core          |
+| CS316 | Python Lab       |      6 | Core          |
+| CS317 | Compiler Lab     |      4 | Core          |
+| CS318 | Automata Lab     |      6 | Core          |
+| CS319 | DB Lab           |      3 | Core          |
+| CS320 | OOPS Lab         |      6 | Core          |
+| CS321 | Java             |      4 | Elective      |
+| CS354 | Database Systems |      8 | Core          |
+| CS355 | Compiler         |      6 | Core          |
+| CS555 | Automata Theory  |      6 | Elective      |
+| CS561 | Architecture     |      5 | Elective      |
+| CS599 | Architecture Lab |      3 | Elective      |
+| ME102 | Mechanics        |      3 | Core          |
+| ME501 | Thermodynamics   |      4 | Elective      |
+| ME502 | Fluids           |      5 | Open Elective |
+| ME503 | Rotation         |      4 | Elective      |
++-------+------------------+--------+---------------+
+29 rows in set (0.01 sec)
+
+
+//-------------------------------------------------------------------------------------------------
+
+Q3)
+
+mysql> create procedure procEnrolledCourseDate(in dt_p date, in ccode_p char(5))
+    -> begin
+    -> select distinct RollNo from Enrolled where CCode=ccode_p and DoE <= dt_p;
+    -> end
+    -> $$
+Query OK, 0 rows affected (0.01 sec)
+
+
+//Calling the Procedure:
+
+mysql> call procEnrolledCourseDate('2021-08-15','CS355');
+    -> $$
++----------+
+| RollNo   |
++----------+
+| 1901CS01 |
+| 1901CS10 |
++----------+
+2 rows in set (0.02 sec)
+
+
+//-------------------------------------------------------------------------------------------------
+
+Q4)
+
+mysql> create Function funEnrolledGenString(rollno_p char(8), ccode_p char(5))
+    -> returns char(11)
+    -> deterministic
+    -> begin
+    -> declare dob_p date;
+    -> set dob_p= (select DoB from Student where RollNo=rollno_p);
+    -> return concat(substr(rollno_p,5,4), right(ccode_p,3), substr(dob_p,9,2), substr(dob_p,6,2));
+    -> end$$
+
+
+//Calling the function:
+
+mysql> select funEnrolledGenString('1901CS01','CS355');
+    -> $$
++------------------------------------------+
+| funEnrolledGenString('1901CS01','CS355') |
++------------------------------------------+
+| CS013553005                              |
++------------------------------------------+
+1 row in set (0.00 sec)
+
+
+
+
+
